@@ -4,16 +4,6 @@ import { getActivities, getAthleteStats } from "./actions";
 import Navbar from "./components/Navbar";
 import { redirect } from "next/navigation";
 import { formatTime, miles } from "./lib/numbers";
-import {
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-} from "@tremor/react";
-import { format } from "date-fns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Summary from "@/components/summary";
 import ActivityTable from "@/components/activity-table";
