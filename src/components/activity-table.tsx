@@ -35,6 +35,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
+import { ExternalLink } from './ui/external-link'
 
 function getPace(meters: number, seconds: number) {
   const pace = seconds / miles(meters)
@@ -70,8 +71,24 @@ export default function ActivityTable(props: Props) {
           )
         },
       }),
+      colHelper.accessor('id', {
+        header: '',
+        cell: ({ getValue }) => (
+          <div className="">
+            <ExternalLink
+              href={`https://www.strava.com/activities/${getValue()}`}
+              className="p-0 text-[#FC4C02]"
+              variant={'link'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on Strava
+            </ExternalLink>
+          </div>
+        ),
+      }),
       colHelper.accessor('start_date', {
-        header: () => <div className="ml-auto">Date</div>,
+        header: () => <div className="ml-auto text-right">Date</div>,
         cell: ({ getValue }) => (
           <div className="text-right">
             {format(new Date(getValue()), 'MM/dd/yyyy h:mmaaa')}
