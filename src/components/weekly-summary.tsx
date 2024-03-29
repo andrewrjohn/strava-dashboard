@@ -24,7 +24,7 @@ export default function WeeklySummary(props: Props) {
 
   return (
     <>
-      <div className="flex gap-2 md:items-start mb-2 flex-col">
+      <div className="flex gap-2 justify-between items-center mb-2 ">
         <h2 className="text-2xl">Week</h2>
 
         <Select onValueChange={(v) => setSelectedWeek(v)} value={selectedWeek}>
