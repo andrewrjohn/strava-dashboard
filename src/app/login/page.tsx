@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import React from 'react'
-import FinishLoginButton from '../components/FinishLoginButton'
-import { COOKIES, STRAVA_AUTHORIZATION_URL } from '../lib/constants'
+import FinishLoginButton from '@/components/FinishLoginButton'
+import { COOKIES, STRAVA_AUTHORIZATION_URL } from '@/lib/constants'
 import { redirect } from 'next/navigation'
 import { ExternalLink } from '@/components/ui/external-link'
 import Image from 'next/image'
@@ -23,20 +23,18 @@ export default function LoginPage(props: Props) {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-center min-h-screen">
-        {searchParams?.code ? (
-          <FinishLoginButton code={searchParams.code} />
-        ) : (
-          <ExternalLink href={STRAVA_AUTHORIZATION_URL} variant={null}>
-            <Image
-              src={ConnectWithStrava}
-              alt="Connect with Strava"
-              height={48}
-            />
-          </ExternalLink>
-        )}
-      </div>
+    <div className="flex items-center justify-center flex-1">
+      {searchParams?.code ? (
+        <FinishLoginButton code={searchParams.code} />
+      ) : (
+        <ExternalLink href={STRAVA_AUTHORIZATION_URL} variant={null}>
+          <Image
+            src={ConnectWithStrava}
+            alt="Connect with Strava"
+            height={48}
+          />
+        </ExternalLink>
+      )}
     </div>
   )
 }

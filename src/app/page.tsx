@@ -27,7 +27,7 @@ export default async function Home() {
   const weeks = groupActivitiesByWeek(activities)
 
   return (
-    <main className="pb-20">
+    <div>
       <Navbar />
 
       <div className="mt-">
@@ -68,6 +68,6 @@ export default async function Home() {
         <h2 className="text-2xl mt-12 mb-2">Runs</h2>
         <ActivityTable activities={activities} />
       </div>
-    </main>
+    </div>
   )
 }
