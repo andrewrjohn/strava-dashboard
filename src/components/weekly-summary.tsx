@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ChevronDown } from 'lucide-react'
 import { getCurrentWeekRange } from '@/lib/utils'
+import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 
 interface Props {
   groupedActivities: Record<string, string>
@@ -23,28 +24,21 @@ export default function WeeklySummary(props: Props) {
 
   return (
     <>
-      <div className="flex items-center gap-2 mb-2 justify-between md:justify-start">
+      <div className="flex gap-2 md:items-start mb-2 flex-col">
         <h2 className="text-2xl">Week</h2>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={'outline'} className="flex items-center gap-2">
-              {selectedWeek}
-              <ChevronDown className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
+        <Select onValueChange={(v) => setSelectedWeek(v)} value={selectedWeek}>
+          <SelectTrigger className="max-w-[240px]">
+            {selectedWeek}
+          </SelectTrigger>
+          <SelectContent>
             {Object.keys(groupedActivities).map((week) => (
-              <DropdownMenuCheckboxItem
-                key={week}
-                onClick={() => setSelectedWeek(week)}
-                checked={selectedWeek === week}
-              >
+              <SelectItem key={week} value={week}>
                 {week}
-              </DropdownMenuCheckboxItem>
+              </SelectItem>
             ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex items-end gap-2 mt-4 md:mt-0">
         <p className="font-semibold text-4xl">

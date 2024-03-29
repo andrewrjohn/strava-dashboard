@@ -34,6 +34,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 
 function getPace(meters: number, seconds: number) {
   const pace = seconds / miles(meters)
@@ -158,7 +159,7 @@ export default function ActivityTable(props: Props) {
         </Table>
       </div>
 
-      <div className="grid grid-cols-[auto,1fr,auto] my-2">
+      <div className="grid grid-cols-3 my-2">
         <div />
         <div className="flex items-center justify-center space-x-2">
           <Button
@@ -180,40 +181,20 @@ export default function ActivityTable(props: Props) {
             Next <ArrowRight className="h-5 w-5" />
           </Button>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={'outline'} className="flex items-center gap-2">
-              Show: {pageSize === activities.length ? 'All' : pageSize}{' '}
-              <ChevronDown className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem
-              checked={pageSize === 10 && pageSize !== activities.length}
-              onCheckedChange={() => table.setPageSize(() => 10)}
-            >
-              10
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={pageSize === 25 && pageSize !== activities.length}
-              onCheckedChange={() => table.setPageSize(() => 25)}
-            >
-              25
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={pageSize === 50 && pageSize !== activities.length}
-              onCheckedChange={() => table.setPageSize(() => 50)}
-            >
-              50
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={pageSize === activities.length}
-              onCheckedChange={() => table.setPageSize(() => activities.length)}
-            >
-              All
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Select
+          value={pageSize.toString()}
+          onValueChange={(v) => table.setPageSize(() => Number(v))}
+        >
+          <SelectTrigger className="w-32 place-self-end">
+            Show: {pageSize === activities.length ? 'All' : pageSize}{' '}
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={'10'}>10</SelectItem>
+            <SelectItem value={'25'}>25</SelectItem>
+            <SelectItem value={'50'}>50</SelectItem>
+            <SelectItem value={activities.length.toString()}>All</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   )
