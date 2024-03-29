@@ -21,19 +21,7 @@ import {
   TableRow,
 } from './ui/table'
 import { Button } from './ui/button'
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  ChevronDown,
-} from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 import { ExternalLink } from './ui/external-link'
 
@@ -77,7 +65,7 @@ export default function ActivityTable(props: Props) {
           <div className="">
             <ExternalLink
               href={`https://www.strava.com/activities/${getValue()}`}
-              className="p-0 text-[#FC4C02]"
+              className="p-0 font-bold"
               variant={'link'}
               target="_blank"
               rel="noopener noreferrer"
