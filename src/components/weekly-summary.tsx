@@ -1,13 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { ChevronDown } from 'lucide-react'
 import { getCurrentWeekRange } from '@/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 
