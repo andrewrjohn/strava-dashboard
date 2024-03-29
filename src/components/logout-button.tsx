@@ -1,20 +1,23 @@
-"use client";
-import { logout } from "@/app/actions";
-import React from "react";
+'use client'
+import { logout } from '@/app/actions'
+import React, { forwardRef } from 'react'
 
-export default function LogoutButton() {
+const LogoutButton = forwardRef<HTMLButtonElement>((_, ref) => {
   return (
     <button
+      ref={ref}
       type="button"
       onClick={() => {
         try {
-          logout();
+          logout()
         } catch (error) {
-          console.error(error);
+          console.error(error)
         }
       }}
     >
       Log Out
     </button>
-  );
-}
+  )
+})
+
+export default LogoutButton

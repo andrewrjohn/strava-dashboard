@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 
 import {
   createColumnHelper,
@@ -8,10 +8,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { getActivities } from "@/app/actions";
-import { formatTime, miles } from "@/app/lib/numbers";
-import { format } from "date-fns";
+} from '@tanstack/react-table'
+import { getActivities } from '@/app/actions'
+import { formatTime, miles } from '@/lib/numbers'
+import { format } from 'date-fns'
 import {
   Table,
   TableBody,
@@ -19,80 +19,80 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
-import { Button } from "./ui/button";
+} from './ui/table'
+import { Button } from './ui/button'
 import {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
   ArrowUp,
   ChevronDown,
-} from "lucide-react";
+} from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from './ui/dropdown-menu'
 
 function getPace(meters: number, seconds: number) {
-  const pace = seconds / miles(meters);
-  return formatTime(pace);
+  const pace = seconds / miles(meters)
+  return formatTime(pace)
 }
 
-type Activities = Awaited<ReturnType<typeof getActivities>>;
+type Activities = Awaited<ReturnType<typeof getActivities>>
 
-const colHelper = createColumnHelper<Activities[number]>();
+const colHelper = createColumnHelper<Activities[number]>()
 
 interface Props {
-  activities: Activities;
+  activities: Activities
 }
 
 export default function ActivityTable(props: Props) {
-  const { activities } = props;
+  const { activities } = props
 
   const columns = React.useMemo(
     () => [
-      colHelper.accessor("distance", {
-        header: "Distance",
+      colHelper.accessor('distance', {
+        header: 'Distance',
         cell: ({ getValue }) => <div>{miles(getValue()).toFixed(2)} mi</div>,
       }),
-      colHelper.accessor("moving_time", {
-        header: "Time",
+      colHelper.accessor('moving_time', {
+        header: 'Time',
         cell: ({ getValue }) => <div>{formatTime(getValue())}</div>,
       }),
-      colHelper.accessor("average_speed", {
-        header: "Pace",
+      colHelper.accessor('average_speed', {
+        header: 'Pace',
         cell: ({ row: { original } }) => {
           return (
             <div>{getPace(original.distance, original.moving_time)} /mi</div>
-          );
+          )
         },
       }),
-      colHelper.accessor("start_date", {
+      colHelper.accessor('start_date', {
         header: () => <div className="ml-auto">Date</div>,
         cell: ({ getValue }) => (
           <div className="text-right">
-            {format(new Date(getValue()), "MM/dd/yyyy h:mmaaa")}
+            {format(new Date(getValue()), 'MM/dd/yyyy h:mmaaa')}
           </div>
         ),
       }),
     ],
-    []
-  );
+    [],
+  )
 
   const table = useReactTable({
     data: activities,
     columns,
     initialState: {
-      sorting: [{ id: "start_date", desc: true }],
+      sorting: [{ id: 'start_date', desc: true }],
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  });
+  })
 
-  const pageSize = table.getState().pagination.pageSize;
+  const pageSize = table.getState().pagination.pageSize
   return (
     <div>
       <div className="rounded-md border">
@@ -107,23 +107,23 @@ export default function ActivityTable(props: Props) {
                         <div
                           className={
                             header.column.getCanSort()
-                              ? "cursor-pointer select-none flex items-center gap-2"
-                              : ""
+                              ? 'cursor-pointer select-none flex items-center gap-2'
+                              : ''
                           }
                           onClick={header.column.getToggleSortingHandler()}
                           title={
                             header.column.getCanSort()
-                              ? header.column.getNextSortingOrder() === "asc"
-                                ? "Sort ascending"
-                                : header.column.getNextSortingOrder() === "desc"
-                                ? "Sort descending"
-                                : "Clear sort"
+                              ? header.column.getNextSortingOrder() === 'asc'
+                                ? 'Sort ascending'
+                                : header.column.getNextSortingOrder() === 'desc'
+                                  ? 'Sort descending'
+                                  : 'Clear sort'
                               : undefined
                           }
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                           {{
                             asc: <ArrowUp className="h-5 w-5" />,
@@ -132,7 +132,7 @@ export default function ActivityTable(props: Props) {
                         </div>
                       )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -146,13 +146,13 @@ export default function ActivityTable(props: Props) {
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
-                    );
+                    )
                   })}
                 </TableRow>
-              );
+              )
             })}
           </TableBody>
         </Table>
@@ -182,8 +182,8 @@ export default function ActivityTable(props: Props) {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="flex items-center gap-2">
-              Show: {pageSize === activities.length ? "All" : pageSize}{" "}
+            <Button variant={'outline'} className="flex items-center gap-2">
+              Show: {pageSize === activities.length ? 'All' : pageSize}{' '}
               <ChevronDown className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
@@ -216,5 +216,5 @@ export default function ActivityTable(props: Props) {
         </DropdownMenu>
       </div>
     </div>
-  );
+  )
 }

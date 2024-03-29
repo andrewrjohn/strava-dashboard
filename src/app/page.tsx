@@ -1,49 +1,15 @@
-import { COOKIES } from './lib/constants'
+import { COOKIES } from '@/lib/constants'
 import { cookies } from 'next/headers'
 import { getActivities, getAthleteStats } from './actions'
-import Navbar from './components/Navbar'
+import Navbar from '@/components/Navbar'
 import { redirect } from 'next/navigation'
-import { formatTime, miles } from './lib/numbers'
+import { formatTime, miles } from '@/lib/numbers'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Summary from '@/components/summary'
 import ActivityTable from '@/components/activity-table'
-import { SummaryActivity } from '@/types/interfaces'
-import { format } from 'date-fns'
 import WeeklySummary from '@/components/weekly-summary'
-import {
-  convertWeekNumberToDateRange,
-  getCurrentMonthName,
-  getCurrentWeekNumber,
-} from './lib/utils'
-
-function groupActivitiesByWeek(activities: SummaryActivity[]) {
-  const sorted = activities.sort(
-    (a, b) => +new Date(b.start_date) - +new Date(a.start_date),
-  )
-
-  const weekLog: Record<string, number[]> = {}
-
-  for (let i = getCurrentWeekNumber(); i > 0; i--) {
-    weekLog[convertWeekNumberToDateRange(i)] = []
-  }
-
-  for (const activity of sorted) {
-    const week = convertWeekNumberToDateRange(
-      Number(format(new Date(activity.start_date), 'w')),
-    )
-
-    weekLog[week].push(activity.distance)
-  }
-
-  const weekTotals: Record<string, string> = {}
-  for (const [week, distances] of Object.entries(weekLog)) {
-    weekTotals[week] = miles(
-      distances.reduce((acc, curr) => acc + curr, 0),
-    ).toFixed(2)
-  }
-
-  return weekTotals
-}
+import { getCurrentMonthName } from '@/lib/utils'
+import { groupActivitiesByWeek } from '@/lib/activities'
 
 export default async function Home() {
   const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
@@ -96,10 +62,10 @@ export default async function Home() {
             />
           </TabsContent>
         </Tabs>
-        <div className="mt-8">
+        <div className="mt-12">
           <WeeklySummary groupedActivities={weeks} />
         </div>
-        <h2 className="text-2xl mt-8 mb-2">Runs</h2>
+        <h2 className="text-2xl mt-12 mb-2">Runs</h2>
         <ActivityTable activities={activities} />
       </div>
     </main>

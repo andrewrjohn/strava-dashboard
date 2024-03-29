@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { ChevronDown } from 'lucide-react'
-import { getCurrentWeekRange } from '@/app/lib/utils'
+import { getCurrentWeekRange } from '@/lib/utils'
 
 interface Props {
   groupedActivities: Record<string, string>
@@ -23,8 +23,8 @@ export default function WeeklySummary(props: Props) {
 
   return (
     <>
-      <div className="flex items-center gap-2 mt-8 mb-2">
-        <h2 className="text-2xl">Weekly Summary</h2>
+      <div className="flex items-center gap-2 mb-2 justify-between md:justify-start">
+        <h2 className="text-2xl">Week</h2>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -46,7 +46,7 @@ export default function WeeklySummary(props: Props) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex items-end gap-2">
+      <div className="flex items-end gap-2 mt-4 md:mt-0">
         <p className="font-semibold text-4xl">
           {groupedActivities[selectedWeek]}
         </p>

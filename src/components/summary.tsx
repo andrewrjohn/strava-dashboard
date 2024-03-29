@@ -11,30 +11,18 @@ export default function Summary(props: Props) {
   const { runCount, miles, time } = props
 
   return (
-    <div className="flex items-center gap-10 mt-2 w-full">
+    <div className="flex items-center gap-10 mt-2 w-full flex-col md:flex-row">
       <Card className="w-full max-w-md px-2 py-3">
-        <h4 className="opacity-75 text-sm">
-          Runs
-        </h4>
-        <p className="font-semibold text-4xl">
-          {runCount}
-        </p>
+        <h4 className="opacity-75 text-sm">Runs</h4>
+        <p className="font-semibold text-4xl">{runCount}</p>
       </Card>
       <Card className="w-full max-w-md px-2 py-3">
-        <h4 className="opacity-75 text-sm">
-          Miles Ran
-        </h4>
-        <p className="font-semibold text-4xl">
-          {miles}
-        </p>
+        <h4 className="opacity-75 text-sm">Miles Ran</h4>
+        <p className="font-semibold text-4xl">{miles}</p>
       </Card>
       <Card className="w-full max-w-md px-2 py-3">
-        <h4 className="opacity-75 text-sm">
-          Time Spent
-        </h4>
-        <p className="font-semibold text-4xl">
-          {time}
-        </p>
+        <h4 className="opacity-75 text-sm">Time Spent</h4>
+        <p className="font-semibold text-4xl">{time}</p>
       </Card>
     </div>
   )

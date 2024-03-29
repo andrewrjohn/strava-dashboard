@@ -1,20 +1,20 @@
-import React from "react";
-import { getAthlete } from "../actions";
-import Link from "next/link";
-import { getAthleteId } from "../lib/cookies";
+import React from 'react'
+import Link from 'next/link'
+import { getAthleteId } from '../lib/cookies'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Image from "next/image";
-import LogoutButton from "@/components/logout-button";
+} from '@/components/ui/dropdown-menu'
+import Image from 'next/image'
+import LogoutButton from '@/components/logout-button'
+import { getAthlete } from '@/app/actions'
 
 export default async function Navbar() {
-  const athlete = getAthleteId() ? await getAthlete() : null;
+  const athlete = getAthleteId() ? await getAthlete() : null
   return (
-    <nav className="flex justify-between w-full py-3">
+    <nav className="flex justify-between w-full py-3 items-center">
       <h1 className="dark:font-black text-2xl dark:text-dark-tremor-content-emphasis">
         Run Hub
       </h1>
@@ -41,5 +41,5 @@ export default async function Navbar() {
         <Link href="/login">Login</Link>
       )}
     </nav>
-  );
+  )
 }
