@@ -37,7 +37,8 @@ export async function stravaApiRequest(path: string) {
     accessToken = await refreshAccessToken(strava_refresh_token)
   }
 
-  const cached = await kv.get(strava_athlete_id.toString() + path)
+  const cacheKey = strava_athlete_id.toString() + path
+  const cached = await kv.get(cacheKey)
 
   if (cached) return cached
 
@@ -48,7 +49,7 @@ export async function stravaApiRequest(path: string) {
   const data = await res.json()
 
   if (res.status !== 200) throw Error(data.message)
-  await kv.set(path, JSON.stringify(data), { ex: CACHE_TTL })
+  await kv.set(cacheKey, JSON.stringify(data), { ex: CACHE_TTL })
 
   return data
 }
