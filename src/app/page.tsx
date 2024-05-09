@@ -9,7 +9,7 @@ import Summary from '@/components/summary'
 import ActivityTable from '@/components/activity-table'
 import WeeklySummary from '@/components/weekly-summary'
 import { getCurrentMonthName } from '@/lib/utils'
-import { groupActivitiesByWeek } from '@/lib/activities'
+import { getCurrentWeekSummary, groupActivitiesByWeek } from '@/lib/activities'
 
 export default async function Home() {
   const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
@@ -25,18 +25,28 @@ export default async function Home() {
   )
 
   const weeks = groupActivitiesByWeek(activities)
+  const currentWeekSummary = getCurrentWeekSummary(activities)
 
   return (
     <div>
       <Navbar />
 
       <div className="mt-">
-        <Tabs defaultValue="month">
+        <Tabs defaultValue="week">
           <TabsList className="mb-4">
+            <TabsTrigger value="week">Week</TabsTrigger>
             <TabsTrigger value="month">Month</TabsTrigger>
             <TabsTrigger value="ytd">Year to Date</TabsTrigger>
             <TabsTrigger value="lifetime">Lifetime</TabsTrigger>
           </TabsList>
+          <TabsContent value="week">
+            <h2 className="text-2xl">This Week</h2>
+            <Summary
+              runCount={currentWeekSummary.count}
+              miles={currentWeekSummary.distance}
+              time={formatTime(currentWeekSummary.time)}
+            />
+          </TabsContent>
           <TabsContent value="month">
             <h2 className="text-2xl">{getCurrentMonthName()}</h2>
             <Summary

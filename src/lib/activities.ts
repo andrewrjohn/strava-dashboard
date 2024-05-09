@@ -31,3 +31,21 @@ export function groupActivitiesByWeek(activities: SummaryActivity[]) {
 
   return weekTotals
 }
+
+export function getCurrentWeekSummary(activities: SummaryActivity[]) {
+  const week = convertWeekNumberToDateRange(getCurrentWeekNumber())
+  const weekActivities = activities.filter(
+    (a) =>
+      convertWeekNumberToDateRange(
+        Number(format(new Date(a.start_date), 'w')),
+      ) === week,
+  )
+
+  const weekTotal = weekActivities.reduce((acc, curr) => acc + curr.distance, 0)
+  return {
+    distance: miles(weekTotal).toFixed(2),
+    count: weekActivities.length,
+    time: weekActivities.reduce((acc, curr) => acc + curr.moving_time, 0),
+    week,
+  }
+}
