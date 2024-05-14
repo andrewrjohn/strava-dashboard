@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers'
 import React from 'react'
-import FinishLoginButton from '@/components/FinishLoginButton'
+import FinishLoginButton from '@/components-temp/FinishLoginButton'
 import { COOKIES, STRAVA_AUTHORIZATION_URL } from '@/lib/constants'
 import { redirect } from 'next/navigation'
-import { ExternalLink } from '@/components/ui/external-link'
+import { ExternalLink } from '@/components-temp/ui/external-link'
 import Image from 'next/image'
 import ConnectWithStrava from '@/images/btn_strava_connectwith_light.svg'
 
