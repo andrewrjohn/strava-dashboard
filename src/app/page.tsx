@@ -1,21 +1,16 @@
 import { COOKIES } from '@/lib/constants'
 import { cookies } from 'next/headers'
 import { getActivities, getAthleteStats } from './actions'
-import Navbar from '@/components-temp/Navbar'
+import Navbar from '@/components/Navbar'
 import { redirect } from 'next/navigation'
 import { formatTime, miles } from '@/lib/numbers'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components-temp/ui/tabs'
-import Summary from '@/components-temp/Summary'
-import ActivityTable from '@/components-temp/ActivityTable'
-import WeeklySummary from '@/components-temp/WeeklySummary'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import Summary from '@/components/Summary'
+import ActivityTable from '@/components/ActivityTable'
+import WeeklySummary from '@/components/WeeklySummary'
 import { getCurrentMonthName } from '@/lib/utils'
 import { getCurrentWeekSummary, groupActivitiesByWeek } from '@/lib/activities'
-import ActivityCalendar from '@/components-temp/ActivityCalendar'
+import ActivityCalendar from '@/components/ActivityCalendar'
 
 export default async function Home() {
   const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
