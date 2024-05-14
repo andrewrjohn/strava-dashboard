@@ -5,11 +5,12 @@ import Navbar from '@/components/Navbar'
 import { redirect } from 'next/navigation'
 import { formatTime, miles } from '@/lib/numbers'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Summary from '@/components/summary'
-import ActivityTable from '@/components/activity-table'
-import WeeklySummary from '@/components/weekly-summary'
+import Summary from '@/components/Summary'
+import ActivityTable from '@/components/ActivityTable'
+import WeeklySummary from '@/components/WeeklySummary'
 import { getCurrentMonthName } from '@/lib/utils'
 import { getCurrentWeekSummary, groupActivitiesByWeek } from '@/lib/activities'
+import ActivityCalendar from '@/components/ActivityCalendar'
 
 export default async function Home() {
   const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
@@ -77,6 +78,8 @@ export default async function Home() {
         </div>
         <h2 className="text-2xl mt-12 mb-2">Runs</h2>
         <ActivityTable activities={activities} />
+        <h2 className="text-2xl mt-12 mb-2">Calendar</h2>
+        <ActivityCalendar activities={activities} />
       </div>
     </div>
   )

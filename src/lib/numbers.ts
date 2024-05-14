@@ -10,3 +10,8 @@ export function formatTime(seconds: number) {
     .toString()
     .padStart(2, hours ? '0' : '')}:${secondsLeft.toString().padStart(2, '0')}`
 }
+
+export function getPace(meters: number, seconds: number) {
+  const pace = seconds / miles(meters)
+  return formatTime(pace)
+}

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import Image from 'next/image'
-import LogoutButton from '@/components/logout-button'
+import LogoutButton from '@/components/LogoutButton'
 import { getAthlete } from '@/app/actions'
 
 export default async function Navbar() {

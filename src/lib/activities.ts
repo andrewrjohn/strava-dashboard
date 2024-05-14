@@ -49,3 +49,6 @@ export function getCurrentWeekSummary(activities: SummaryActivity[]) {
     week,
   }
 }
+
+export const getStravaActivityUrl = (id: number) =>
+  `https://www.strava.com/activities/${id}`

@@ -9,8 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { getActivities } from '@/app/actions'
-import { formatTime, miles } from '@/lib/numbers'
+import { formatTime, getPace, miles } from '@/lib/numbers'
 import { format } from 'date-fns'
 import {
   Table,
@@ -24,13 +23,10 @@ import { Button } from './ui/button'
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 import { ExternalLink } from './ui/external-link'
+import { SummaryActivity } from '@/types/interfaces'
+import { getStravaActivityUrl } from '@/lib/activities'
 
-function getPace(meters: number, seconds: number) {
-  const pace = seconds / miles(meters)
-  return formatTime(pace)
-}
-
-type Activities = Awaited<ReturnType<typeof getActivities>>
+type Activities = SummaryActivity[]
 
 const colHelper = createColumnHelper<Activities[number]>()
 
@@ -64,7 +60,7 @@ export default function ActivityTable(props: Props) {
         cell: ({ getValue }) => (
           <div className="">
             <ExternalLink
-              href={`https://www.strava.com/activities/${getValue()}`}
+              href={getStravaActivityUrl(getValue())}
               className="p-0 font-bold"
               variant={'link'}
               target="_blank"
