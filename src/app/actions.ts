@@ -175,6 +175,6 @@ export async function getActivities(): Promise<SummaryActivity[]> {
   const athleteId = getAthleteId()
   if (!athleteId) return []
 
-  const data = await stravaApiRequest(`/athlete/activities`)
+  const data = await stravaApiRequest(`/athlete/activities?per_page=200`)
   return data
 }
