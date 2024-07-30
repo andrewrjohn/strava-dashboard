@@ -1,6 +1,6 @@
 import { COOKIES } from '@/lib/constants'
 import { cookies } from 'next/headers'
-import { getActivities, getAthleteStats } from './actions'
+import { getActivities, getAthlete, getAthleteStats } from './actions'
 import Navbar from '@/components/Navbar'
 import { redirect } from 'next/navigation'
 import { formatTime, miles } from '@/lib/numbers'
@@ -11,6 +11,7 @@ import WeeklySummary from '@/components/WeeklySummary'
 import { getCurrentMonthName } from '@/lib/utils'
 import { getCurrentWeekSummary, groupActivitiesByWeek } from '@/lib/activities'
 import ActivityCalendar from '@/components/ActivityCalendar'
+import React from 'react'
 
 export default async function Home() {
   const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
@@ -20,6 +21,7 @@ export default async function Home() {
   }
 
   const stats = await getAthleteStats()
+  const athlete = await getAthlete()
 
   const activities = (await getActivities()).filter((a) =>
     a.sport_type.toLowerCase().includes('run'),
@@ -76,10 +78,29 @@ export default async function Home() {
         <div className="mt-12">
           <WeeklySummary groupedActivities={weeks} />
         </div>
-        <h2 className="text-2xl mt-12 mb-2">Runs</h2>
+        <h2 className="text-2xl mt-12 mb-2">Training Log</h2>
         <ActivityTable activities={activities} />
-        <h2 className="text-2xl mt-12 mb-2">Calendar</h2>
-        <ActivityCalendar activities={activities} />
+        <section className="flex sm:flex-row flex-col sm:justify-between">
+          <div>
+            <h2 className="text-2xl mt-12 mb-2">Calendar</h2>
+            <ActivityCalendar activities={activities} />
+          </div>
+          <div>
+            <h2 className="text-2xl mt-12 mb-2">Shoes</h2>
+            <div className="inline-grid grid-cols-2 gap-x-20 gap-y-2">
+              {athlete.shoes
+                .sort((a, b) => b.distance - a.distance)
+                .map((shoes) => (
+                  <React.Fragment key={shoes.id}>
+                    <div>{shoes.name}</div>
+                    <div className="justify-self-end">
+                      {miles(shoes.distance).toFixed(2)} mi
+                    </div>
+                  </React.Fragment>
+                ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   )
