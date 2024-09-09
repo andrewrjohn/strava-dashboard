@@ -19,7 +19,9 @@ export function groupActivitiesByWeek(activities: SummaryActivity[]) {
       Number(format(new Date(activity.start_date), 'w')),
     )
 
-    weekLog[week].push(activity.distance)
+    if (weekLog[week]) {
+      weekLog[week].push(activity.distance)
+    }
   }
 
   const weekTotals: Record<string, string> = {}
