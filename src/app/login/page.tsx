@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 import React from 'react'
-import FinishLoginButton from '@/components/FinishLoginButton'
+import CompleteLogin from '@/components/CompleteLogin'
 import { COOKIES, STRAVA_AUTHORIZATION_URL } from '@/lib/constants'
 import { redirect } from 'next/navigation'
 import { ExternalLink } from '@/components/ui/external-link'
@@ -25,7 +25,7 @@ export default function LoginPage(props: Props) {
   return (
     <div className="flex items-center justify-center flex-1">
       {searchParams?.code ? (
-        <FinishLoginButton code={searchParams.code} />
+        <CompleteLogin code={searchParams.code} />
       ) : (
         <ExternalLink href={STRAVA_AUTHORIZATION_URL} variant={null}>
           <Image

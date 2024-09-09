@@ -30,6 +30,8 @@ export default async function Home() {
   const weeks = groupActivitiesByWeek(activities)
   const currentWeekSummary = getCurrentWeekSummary(activities)
 
+  const totalMiles = miles(stats.all_run_totals.distance).toFixed(0)
+
   return (
     <div>
       <Navbar />
