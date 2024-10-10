@@ -41,7 +41,9 @@ export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
     )
   }
 
-  const cacheKey = strava_athlete_id.toString() + path
+  const initialUrl = new URL(`${BASE_URL}${path}`)
+
+  const cacheKey = strava_athlete_id.toString() + initialUrl.pathname
 
   // We pass in the athlete ID when updating from webhook
   // so we want to bypass the cache in this case
@@ -51,13 +53,44 @@ export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
     if (cached) return JSON.parse(cached)
   }
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  })
+  let data: any
 
-  const data = await res.json()
+  const fetchData = async (url: URL) => {
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
 
-  if (res.status !== 200) throw Error(data.message)
+    const innerData = await res.json()
+
+    if (res.status !== 200) throw Error(innerData.message)
+
+    const pageSize = Number(url.searchParams.get('per_page'))
+    const isPaginated = pageSize > 0
+
+    if (!isPaginated) {
+      data = innerData
+    } else {
+      const page = Number(url.searchParams.get('page')) || 1
+
+      if (data) {
+        data = [...data, ...innerData]
+      } else {
+        data = innerData
+      }
+
+      const nextUrl = new URL(url)
+      nextUrl.searchParams.set('page', (page + 1).toString())
+
+      const hasNextPage =
+        Array.isArray(innerData) && innerData.length === pageSize
+
+      if (hasNextPage) {
+        await fetchData(nextUrl)
+      }
+    }
+  }
+
+  await fetchData(initialUrl)
 
   await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(data))
 
@@ -164,7 +197,6 @@ export async function completeLogin(code: string) {
 }
 
 export async function logout() {
-  console.log('logout')
   cookies().delete(COOKIES.STRAVA_ATHLETE_ID)
 
   redirect('/login')
@@ -197,8 +229,11 @@ export async function getActivities(
 
   if (!athleteId) return []
 
+  // Strava max is 200
+  const pageSize = 200
+
   const data = await stravaApiRequest(
-    `/athlete/activities?per_page=200`,
+    `/athlete/activities?per_page=${pageSize}`,
     athleteId,
   )
   return data
