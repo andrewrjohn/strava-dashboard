@@ -1,12 +1,14 @@
-export const POST = async (req: Request) => {
+import { NextRequest } from 'next/server'
+
+export const POST = async (req: NextRequest) => {
   const body = await req.json()
   console.log(body)
 
   return Response.json({ success: true }, { status: 200 })
 }
 
-export const GET = async (req: Request) => {
-  const query = new URLSearchParams(req.url)
+export const GET = async (req: NextRequest) => {
+  const query = req.nextUrl.searchParams
   const challenge = query.get('hub.challenge')
   const verifyToken = query.get('hub.verify_token')
 
