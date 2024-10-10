@@ -10,6 +10,7 @@ export const GET = async (req: Request) => {
   const challenge = query.get('hub.challenge')
   const verifyToken = query.get('hub.verify_token')
 
+  console.log({ verifyToken, env: process.env.STRAVA_WEBHOOK_SECRET })
   if (verifyToken !== process.env.STRAVA_WEBHOOK_SECRET) {
     return Response.json({ success: false }, { status: 401 })
   }
