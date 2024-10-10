@@ -22,15 +22,14 @@ export default async function Home() {
 
   const stats = await getAthleteStats()
   const athlete = await getAthlete()
+  const allActivities = await getActivities()
 
-  const activities = (await getActivities()).filter((a) =>
+  const activities = allActivities.filter((a) =>
     a.sport_type.toLowerCase().includes('run'),
   )
 
   const weeks = groupActivitiesByWeek(activities)
   const currentWeekSummary = getCurrentWeekSummary(activities)
-
-  const totalMiles = miles(stats.all_run_totals.distance).toFixed(0)
 
   return (
     <div>

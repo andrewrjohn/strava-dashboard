@@ -2,11 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import React from 'react'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { FrownIcon } from 'lucide-react'
-
-const inter = Inter({ subsets: ['latin'] })
+import { logout } from './actions'
 
 export default function GlobalError({
   error,
@@ -24,6 +22,22 @@ export default function GlobalError({
       <Button onClick={() => reset()} className="mt-6">
         Try again
       </Button>
+      <p className="mt-4">
+        If the problem persists, please try{' '}
+        <button
+          onClick={() => {
+            try {
+              logout()
+            } catch (e) {
+              console.error(e)
+            }
+          }}
+          className="underline"
+        >
+          logging out
+        </button>{' '}
+        and logging back in.
+      </p>
     </div>
   )
 }

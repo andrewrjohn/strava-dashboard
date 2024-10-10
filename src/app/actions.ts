@@ -9,12 +9,14 @@ import {
   DetailedAthlete,
   SummaryActivity,
 } from '@/types/interfaces'
-import { kv } from '@vercel/kv'
 import { redirect } from 'next/navigation'
+import { redis } from '@/lib/redis'
 
 const BASE_URL = 'https://www.strava.com/api/v3'
 
-const CACHE_TTL = 60 * 60 * 6 // 6 hours in seconds
+// Need a couple hours minimum because Strava rate limits are pretty low
+// https://www.strava.com/settings/api
+const CACHE_TTL = 60 * 60 * 4 // 4 hours in seconds
 
 export async function stravaApiRequest(path: string) {
   const strava_athlete_id = Number(
@@ -38,9 +40,9 @@ export async function stravaApiRequest(path: string) {
   }
 
   const cacheKey = strava_athlete_id.toString() + path
-  const cached = await kv.get(cacheKey)
+  const cached = await redis.get(cacheKey)
 
-  if (cached) return cached
+  if (cached) return JSON.parse(cached)
 
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -49,7 +51,7 @@ export async function stravaApiRequest(path: string) {
   const data = await res.json()
 
   if (res.status !== 200) throw Error(data.message)
-  await kv.set(cacheKey, JSON.stringify(data), { ex: CACHE_TTL })
+  await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(data))
 
   return data
 }
