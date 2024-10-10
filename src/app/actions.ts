@@ -14,14 +14,13 @@ import { redis } from '@/lib/redis'
 
 const BASE_URL = 'https://www.strava.com/api/v3'
 
-// Need a couple hours minimum because Strava rate limits are pretty low
-// https://www.strava.com/settings/api
-const CACHE_TTL = 60 * 60 * 4 // 4 hours in seconds
+// Strava rate limits are pretty low
+// The user cache is updated via webhook, so this is more like a max TTL in case of webhook failure
+const CACHE_TTL = 60 * 60 * 24 // 24 hours in seconds
 
-export async function stravaApiRequest(path: string) {
-  const strava_athlete_id = Number(
-    cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value,
-  )
+export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
+  const strava_athlete_id =
+    stravaAthleteId ?? Number(cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value)
   if (!strava_athlete_id) throw Error('Missing strava athlete id cookie')
 
   const user = await prisma.user.findFirst({ where: { strava_athlete_id } })
@@ -36,13 +35,21 @@ export async function stravaApiRequest(path: string) {
   const tokenExpired = accessTokenExpiresAt <= Date.now()
 
   if (tokenExpired) {
-    accessToken = await refreshAccessToken(strava_refresh_token)
+    accessToken = await refreshAccessToken(
+      strava_refresh_token,
+      stravaAthleteId,
+    )
   }
 
   const cacheKey = strava_athlete_id.toString() + path
-  const cached = await redis.get(cacheKey)
 
-  if (cached) return JSON.parse(cached)
+  // We pass in the athlete ID when updating from webhook
+  // so we want to bypass the cache in this case
+  if (!stravaAthleteId) {
+    const cached = await redis.get(cacheKey)
+
+    if (cached) return JSON.parse(cached)
+  }
 
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -51,12 +58,16 @@ export async function stravaApiRequest(path: string) {
   const data = await res.json()
 
   if (res.status !== 200) throw Error(data.message)
+
   await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(data))
 
   return data
 }
 
-async function refreshAccessToken(refreshToken: string) {
+async function refreshAccessToken(
+  refreshToken: string,
+  stravaAthleteId?: number,
+) {
   const strava_secret = process.env.STRAVA_SECRET
 
   if (!strava_secret) throw Error('Missing STRAVA_SECRET env variable')
@@ -81,9 +92,8 @@ async function refreshAccessToken(refreshToken: string) {
     refresh_token: string
     expires_at: number
   } = await res.json()
-  const strava_athlete_id = Number(
-    cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value,
-  )
+  const strava_athlete_id =
+    stravaAthleteId ?? Number(cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value)
 
   if (!strava_athlete_id) throw Error('Missing strava athlete id cookie')
 
@@ -160,23 +170,42 @@ export async function logout() {
   redirect('/login')
 }
 
-export async function getAthlete(): Promise<DetailedAthlete> {
-  const data = await stravaApiRequest(`/athlete`)
+export async function getAthlete(
+  stravaAthleteId?: number,
+): Promise<DetailedAthlete> {
+  const data = await stravaApiRequest(`/athlete`, stravaAthleteId)
   return data
 }
 
-export async function getAthleteStats(): Promise<ActivityStats> {
-  const athleteId = getAthleteId()
+export async function getAthleteStats(
+  stravaAthleteId?: number,
+): Promise<ActivityStats> {
+  let athleteId = stravaAthleteId ?? getAthleteId()
   if (!athleteId) throw Error('Missing athlete id')
+  athleteId = Number(athleteId)
 
-  const data = await stravaApiRequest(`/athletes/${athleteId}/stats`)
+  const data = await stravaApiRequest(`/athletes/${athleteId}/stats`, athleteId)
   return data
 }
 
-export async function getActivities(): Promise<SummaryActivity[]> {
-  const athleteId = getAthleteId()
+export async function getActivities(
+  stravaAthleteId?: number,
+): Promise<SummaryActivity[]> {
+  let athleteId = stravaAthleteId ?? getAthleteId()
+  if (!athleteId) throw Error('Missing athlete id')
+  athleteId = Number(athleteId)
+
   if (!athleteId) return []
 
-  const data = await stravaApiRequest(`/athlete/activities?per_page=200`)
+  const data = await stravaApiRequest(
+    `/athlete/activities?per_page=200`,
+    athleteId,
+  )
   return data
+}
+
+export async function updateUserData(athleteId: number) {
+  await getAthlete(athleteId)
+  await getAthleteStats(athleteId)
+  await getActivities(athleteId)
 }
