@@ -69,24 +69,25 @@ export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
 
     if (!isPaginated) {
       data = innerData
-    } else {
-      const page = Number(url.searchParams.get('page')) || 1
+      return
+    }
 
-      if (data) {
-        data = [...data, ...innerData]
-      } else {
-        data = innerData
-      }
+    if (data) {
+      data = [...data, ...innerData]
+    } else {
+      data = innerData
+    }
+
+    const hasNextPage =
+      Array.isArray(innerData) && innerData.length === pageSize
+
+    if (hasNextPage) {
+      const currentPage = Number(url.searchParams.get('page')) || 1
 
       const nextUrl = new URL(url)
-      nextUrl.searchParams.set('page', (page + 1).toString())
+      nextUrl.searchParams.set('page', `${currentPage + 1}`)
 
-      const hasNextPage =
-        Array.isArray(innerData) && innerData.length === pageSize
-
-      if (hasNextPage) {
-        await fetchData(nextUrl)
-      }
+      await fetchData(nextUrl)
     }
   }
 
