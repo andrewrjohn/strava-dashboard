@@ -12,6 +12,7 @@ import { getCurrentMonthName } from '@/lib/utils'
 import { getCurrentWeekSummary, groupActivitiesByWeek } from '@/lib/activities'
 import ActivityCalendar from '@/components/ActivityCalendar'
 import React from 'react'
+import { HistoricChart } from '@/components/HistoricChart'
 
 export default async function Home() {
   const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
@@ -103,6 +104,9 @@ export default async function Home() {
           </div>
         </section>
       </div>
+      <section className="w-full mt-12">
+        <HistoricChart data={weeks} />
+      </section>
     </div>
   )
 }
