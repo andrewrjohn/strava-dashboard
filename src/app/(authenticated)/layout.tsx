@@ -23,11 +23,12 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const cookie = getAthleteId()
-  const athlete = await getAthlete()
 
   if (!cookie) {
     redirect('/login')
   }
+
+  const athlete = await getAthlete()
 
   return (
     <html lang="en" className="antialiased dark">
