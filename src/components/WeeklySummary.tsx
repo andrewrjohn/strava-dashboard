@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { getCurrentWeekRange } from '@/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
+import { Card, CardTitle, CardHeader, CardContent } from './ui/card'
 
 interface Props {
   groupedActivities: Record<string, string>
@@ -15,29 +16,37 @@ export default function WeeklySummary(props: Props) {
   )
 
   return (
-    <>
-      <div className="flex gap-2 justify-between items-center mb-2 ">
-        <h2 className="text-2xl">Week</h2>
-
-        <Select onValueChange={(v) => setSelectedWeek(v)} value={selectedWeek}>
-          <SelectTrigger className="max-w-[240px]">
-            {selectedWeek}
-          </SelectTrigger>
-          <SelectContent>
-            {Object.keys(groupedActivities).map((week) => (
-              <SelectItem key={week} value={week}>
-                {week}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="flex items-end gap-2 mt-4 md:mt-0">
-        <p className="font-semibold text-4xl">
-          {groupedActivities[selectedWeek]}
-        </p>
-        <h4 className="opacity-75 text-sm">miles</h4>
-      </div>
-    </>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <div className="flex flex-col md:flex-row gap-2 justify-between items-center">
+            <div>Week Total</div>
+            <Select
+              onValueChange={(v) => setSelectedWeek(v)}
+              value={selectedWeek}
+            >
+              <SelectTrigger className="max-w-[240px]">
+                {selectedWeek}
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(groupedActivities).map((week) => (
+                  <SelectItem key={week} value={week}>
+                    {week}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-end justify-center md:justify-start gap-2">
+          <p className="font-medium text-2xl">
+            {groupedActivities[selectedWeek]}
+          </p>
+          <h4 className="text-muted-foreground mb-0.5 text-sm">miles</h4>
+        </div>
+      </CardContent>
+    </Card>
   )
 }

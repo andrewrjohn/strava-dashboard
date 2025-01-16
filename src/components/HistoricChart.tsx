@@ -34,14 +34,11 @@ export function HistoricChart(props: Props) {
             fontSize={14}
             className="mt-4"
             dataKey="week"
-            ticks={data
-              .filter((_, i) =>
-                i % 6 === 0 || i === 0 || i === data.length - 1 ? true : false,
-              )
-              .map(({ week }) => week)}
+            ticks={data.map(({ week }, i) =>
+              i % 6 === 0 || i === data.length - 1 ? week : '',
+            )}
           />
           <Tooltip
-            formatter={(value) => `${value} miles`}
             labelClassName="text-black"
             content={({ active, payload, label }) => {
               const firstPayload = payload?.[0]
@@ -61,10 +58,11 @@ export function HistoricChart(props: Props) {
             }}
           />
           <Area
-            type="natural"
+            type="monotone"
             dataKey="distance"
-            stroke="currentColor"
-            fill="currentColor"
+            stroke="#FC4C02"
+            fill="#FC4C02"
+            min={0}
           />
         </AreaChart>
       </ResponsiveContainer>

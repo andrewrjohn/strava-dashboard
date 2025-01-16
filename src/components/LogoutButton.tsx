@@ -1,5 +1,6 @@
 'use client'
 import { logout } from '@/app/actions'
+import { LogOutIcon } from 'lucide-react'
 import React, { forwardRef } from 'react'
 
 const LogoutButton = forwardRef<HTMLButtonElement>((_, ref) => {
@@ -7,6 +8,7 @@ const LogoutButton = forwardRef<HTMLButtonElement>((_, ref) => {
     <button
       ref={ref}
       type="button"
+      className="text-xs text-muted-foreground text-left"
       onClick={() => {
         try {
           logout()
@@ -15,7 +17,8 @@ const LogoutButton = forwardRef<HTMLButtonElement>((_, ref) => {
         }
       }}
     >
-      Log Out
+      <span className="hidden md:block">Log Out</span>
+      <LogOutIcon className="h-4 w-4 md:hidden" />
     </button>
   )
 })

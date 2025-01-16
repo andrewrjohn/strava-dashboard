@@ -1,5 +1,5 @@
 import { SummaryActivity } from '@/types/interfaces'
-import { format } from 'date-fns'
+import { format, getISOWeeksInYear } from 'date-fns'
 import { convertWeekNumberToDateRange, getCurrentWeekNumber } from '@/lib/utils'
 import { miles } from './numbers'
 
@@ -10,17 +10,37 @@ export function groupActivitiesByWeek(activities: SummaryActivity[]) {
 
   const weekLog: Record<string, number[]> = {}
 
-  for (let i = getCurrentWeekNumber(); i > 0; i--) {
-    weekLog[convertWeekNumberToDateRange(i)] = []
+  const firstActivityYear = new Date(
+    sorted[sorted.length - 1].start_date,
+  ).getFullYear()
+
+  const currentYear = new Date().getFullYear()
+  const currentWeek = Number(format(new Date(), 'w'))
+
+  for (let year = currentYear; year >= firstActivityYear; year--) {
+    const date = new Date()
+    date.setFullYear(year)
+
+    const totalWeeks =
+      currentYear === year ? currentWeek : getISOWeeksInYear(date)
+
+    for (let week = totalWeeks; week > 0; week--) {
+      const range = convertWeekNumberToDateRange(year, week)
+
+      weekLog[range] = []
+    }
   }
 
   for (const activity of sorted) {
-    const week = convertWeekNumberToDateRange(
-      Number(format(new Date(activity.start_date), 'w')),
+    const d = new Date(activity.start_date)
+
+    const range = convertWeekNumberToDateRange(
+      d.getFullYear(),
+      Number(format(d, 'w')),
     )
 
-    if (weekLog[week]) {
-      weekLog[week].push(activity.distance)
+    if (weekLog[range]) {
+      weekLog[range].push(activity.distance)
     }
   }
 
@@ -35,10 +55,14 @@ export function groupActivitiesByWeek(activities: SummaryActivity[]) {
 }
 
 export function getCurrentWeekSummary(activities: SummaryActivity[]) {
-  const week = convertWeekNumberToDateRange(getCurrentWeekNumber())
+  const week = convertWeekNumberToDateRange(
+    new Date().getFullYear(),
+    getCurrentWeekNumber(),
+  )
   const weekActivities = activities.filter(
     (a) =>
       convertWeekNumberToDateRange(
+        new Date().getFullYear(),
         Number(format(new Date(a.start_date), 'w')),
       ) === week,
   )

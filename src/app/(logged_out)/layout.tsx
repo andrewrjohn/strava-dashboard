@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import '../globals.css'
 import Image from 'next/image'
 import PoweredByStrava from '@/images/api_logo_pwrdBy_strava_horiz_gray.svg'
 
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="antialiased dark container">
+    <html lang="en" className="antialiased dark">
       <body
         className={`${inter.className} dark:bg-background dark:text-foreground min-h-screen flex flex-col`}
       >

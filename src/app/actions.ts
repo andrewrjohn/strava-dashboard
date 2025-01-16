@@ -217,7 +217,38 @@ export async function getAthleteStats(
   if (!athleteId) throw Error('Missing athlete id')
   athleteId = Number(athleteId)
 
-  const data = await stravaApiRequest(`/athletes/${athleteId}/stats`, athleteId)
+  const data = (await stravaApiRequest(
+    `/athletes/${athleteId}/stats`,
+    athleteId,
+  )) as ActivityStats
+
+  const activities = await getActivities(athleteId)
+
+  // YTD stats - for some reason Strava is returning empty values for this
+  // so we need to calculate it manually
+  if (activities.length && !data.ytd_run_totals.count) {
+    const ytdActivities = activities.filter(
+      (a) => new Date(a.start_date).getFullYear() === new Date().getFullYear(),
+    )
+    const ytdDistance = ytdActivities.reduce((acc, a) => acc + a.distance, 0)
+    const ytdTime = ytdActivities.reduce((acc, a) => acc + a.moving_time, 0)
+
+    data.ytd_run_totals.count = ytdActivities.length
+    data.ytd_run_totals.distance = ytdDistance
+    data.ytd_run_totals.moving_time = ytdTime
+  }
+
+  // Lifetime stats - for some reason Strava is returning empty values for this
+  // so we need to calculate it manually
+  if (activities.length && !data.all_run_totals.count) {
+    const lifetimeDistance = activities.reduce((acc, a) => acc + a.distance, 0)
+    const lifetimeTime = activities.reduce((acc, a) => acc + a.moving_time, 0)
+
+    data.all_run_totals.count = activities.length
+    data.all_run_totals.distance = lifetimeDistance
+    data.all_run_totals.moving_time = lifetimeTime
+  }
+
   return data
 }
 

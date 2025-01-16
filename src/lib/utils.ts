@@ -13,19 +13,33 @@ export function getCurrentMonthName() {
   return month
 }
 
-export function convertWeekNumberToDateRange(weekNumber: number) {
-  const today = new Date()
-  const currentYear = today.getFullYear()
-  const firstDayOfYear = new Date(currentYear, 0, 0)
-  const weekNumberDate = new Date(
-    firstDayOfYear.setDate(firstDayOfYear.getDate() + (weekNumber - 1) * 7),
-  )
+export function convertWeekNumberToDateRange(year: number, weekNumber: number) {
+  const firstDayOfYear = new Date(year, 0, 0)
+
+  // Offset handles if the first day of the year is not on a Sunday
+  // Otherwise all weeks will be off
+  const dayOffset = firstDayOfYear.getDay()
+
+  const weekStartDayOfYear = (weekNumber - 1) * 7 - dayOffset
+  const weekStartDate = new Date(year, 0, weekStartDayOfYear)
+
   const weekEndDate = new Date(
-    firstDayOfYear.setDate(firstDayOfYear.getDate() + 6),
+    weekStartDate.getFullYear(),
+    weekStartDate.getMonth(),
+    weekStartDate.getDate() + 6,
   )
-  return `${weekNumberDate.getMonth() + 1}/${weekNumberDate.getDate()}/${weekNumberDate.getFullYear()} - ${weekEndDate.getMonth() + 1}/${weekEndDate.getDate()}/${weekEndDate.getFullYear()}`
+
+  const startMonth = weekStartDate.getMonth() + 1
+  const startDay = weekStartDate.getDate()
+  const startYear = weekStartDate.getFullYear()
+
+  const endMonth = weekEndDate.getMonth() + 1
+  const endDay = weekEndDate.getDate()
+  const endYear = weekEndDate.getFullYear()
+
+  return `${startMonth}/${startDay}/${startYear} - ${endMonth}/${endDay}/${endYear}`
 }
 
 export const getCurrentWeekNumber = () => Number(format(new Date(), 'w'))
 export const getCurrentWeekRange = () =>
-  convertWeekNumberToDateRange(getCurrentWeekNumber())
+  convertWeekNumberToDateRange(new Date().getFullYear(), getCurrentWeekNumber())
