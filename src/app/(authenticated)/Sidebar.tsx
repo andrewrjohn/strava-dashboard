@@ -13,8 +13,6 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import { useEffect } from 'react'
 
 const routes = [
   {
@@ -48,29 +46,8 @@ export function Sidebar(props: Props) {
 
   const pathname = usePathname()
 
-  const [windowHeight, setWindowHeight] = useState(0)
-
-  useEffect(() => {
-    const updateHeight = () => {
-      setWindowHeight(window.innerHeight)
-    }
-
-    updateHeight()
-
-    window.addEventListener('resize', updateHeight)
-
-    return () => {
-      window.removeEventListener('resize', updateHeight)
-    }
-  }, [])
-
   return (
-    <div
-      // Fallback to CSS 'h-screen' so we minimal UI jump while the
-      // windowHeight is being calculated
-      className="flex h-screen sticky top-0 left-0 flex-col border-r bg-muted/10"
-      style={{ height: windowHeight || undefined }}
-    >
+    <div className="flex flex-col h-[100dvh] border-r bg-muted/10">
       <div className="flex h-14 items-center border-b px-6">
         <h1 className="text-xl font-bold sr-only md:not-sr-only">Run Hub</h1>
         <h1 className="text-xl font-bold md:hidden block">RH</h1>

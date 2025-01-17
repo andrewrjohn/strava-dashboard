@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased dark">
       <body
-        className={`${inter.className} dark:bg-background dark:text-foreground min-h-screen flex flex-col`}
+        className={`${inter.className} dark:bg-background dark:text-foreground min-h-[100dvh] flex flex-col`}
       >
         <main className="flex-1 flex flex-col">{children}</main>
       </body>

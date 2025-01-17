@@ -18,7 +18,7 @@ export default async function RootLayout({
   const athlete = await getAthlete()
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-[100dvh]">
       <Sidebar athlete={athlete} />
 
       <div className="md:px-7 px-4 py-3 md:py-6 flex flex-col flex-1 overflow-y-scroll w-full">
