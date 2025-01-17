@@ -8,7 +8,7 @@ const LogoutButton = forwardRef<HTMLButtonElement>((_, ref) => {
     <button
       ref={ref}
       type="button"
-      className="text-xs text-muted-foreground text-left"
+      className="text-xs text-muted-foreground text-left flex items-center gap-2"
       onClick={() => {
         try {
           logout()
@@ -18,7 +18,7 @@ const LogoutButton = forwardRef<HTMLButtonElement>((_, ref) => {
       }}
     >
       <span className="hidden md:block">Log Out</span>
-      <LogOutIcon className="h-4 w-4 md:hidden" />
+      <LogOutIcon className="h-4 w-4" />
     </button>
   )
 })

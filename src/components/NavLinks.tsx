@@ -5,7 +5,6 @@ import { Button } from './ui/button'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
-  ActivityIcon,
   BarChartIcon,
   CalendarIcon,
   FootprintsIcon,
@@ -35,12 +34,6 @@ const routes = [
     href: '/gear',
   },
 ]
-
-interface Props {
-  href: string
-  label: string
-  icon: LucideIcon
-}
 
 export function NavLinks() {
   const pathname = usePathname()
