@@ -68,7 +68,7 @@ export function Sidebar(props: Props) {
     <div
       // Fallback to CSS 'h-screen' so we minimal UI jump while the
       // windowHeight is being calculated
-      className="flex h-screen flex-col border-r bg-muted/10"
+      className="flex h-screen sticky top-0 left-0 flex-col border-r bg-muted/10"
       style={{ height: windowHeight || undefined }}
     >
       <div className="flex h-14 items-center border-b px-6">
