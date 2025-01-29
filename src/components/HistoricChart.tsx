@@ -18,7 +18,7 @@ export function HistoricChart(props: Props) {
   data.splice(0, firstWeekWithData)
 
   return (
-    <div className="h-[400px]">
+    <div className="h-[400px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           width={500}

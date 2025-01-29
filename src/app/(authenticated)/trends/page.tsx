@@ -11,14 +11,16 @@ export default async function Trends() {
   const weeks = groupActivitiesByWeek(activities)
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 flex flex-col flex-1">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Trends</h2>
         <p className="text-muted-foreground">
           Your running trends grouped by week
         </p>
       </div>
-      <HistoricChart data={weeks} />
+      <div className="flex-1 flex items-end">
+        <HistoricChart data={weeks} />
+      </div>
     </div>
   )
 }
