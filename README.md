@@ -8,3 +8,9 @@ Features:
 - Trend graph grouped by week
 - Map view of all routes ever run
 - Gear stats
+
+Tech Stack:
+
+- Next.js
+- Strava API
+- Upstash for request caching

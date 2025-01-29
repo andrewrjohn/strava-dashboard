@@ -5,11 +5,15 @@ import { Calendar } from './ui/calendar'
 import { buttonVariants } from './ui/button'
 import { cn } from '@/lib/utils'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { formatTime, getPace, miles } from '@/lib/numbers'
 import { format } from 'date-fns'
 import { ArrowRightIcon } from 'lucide-react'
 import { ExternalLink } from './ui/external-link'
-import { getStravaActivityUrl } from '@/lib/activities'
+import {
+  getStravaActivityUrl,
+  formatTime,
+  getPace,
+  miles,
+} from '@/lib/activities'
 
 interface Props {
   activities: SummaryActivity[]

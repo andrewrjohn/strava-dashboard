@@ -1,7 +1,7 @@
 import { FooterImage } from '@/components/FooterImage'
-import { getAthleteId } from '@/lib/cookies'
+import { getCurrentAthleteId } from '@/lib/cookies'
 import { redirect } from 'next/navigation'
-import { getAthlete } from '../actions'
+import { getAthlete } from '../../lib/strava'
 import { Sidebar } from './Sidebar'
 
 export default async function RootLayout({
@@ -9,7 +9,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const cookie = getAthleteId()
+  const cookie = getCurrentAthleteId()
 
   if (!cookie) {
     redirect('/login')

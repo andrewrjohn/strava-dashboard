@@ -1,6 +1,17 @@
-import { cookies } from "next/headers";
-import { COOKIES } from "./constants";
+import { cookies } from 'next/headers'
 
-export function getAthleteId() {
-  return cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value ?? null;
+const KEYS = {
+  STRAVA_ATHLETE_ID: 'strava_athlete_id',
+}
+
+export function getCurrentAthleteId() {
+  return cookies().get(KEYS.STRAVA_ATHLETE_ID)?.value ?? null
+}
+
+export function setCurrentAthleteId(athleteId: number) {
+  cookies().set(KEYS.STRAVA_ATHLETE_ID, athleteId.toString())
+}
+
+export function clearCurrentAthleteId() {
+  cookies().delete(KEYS.STRAVA_ATHLETE_ID)
 }

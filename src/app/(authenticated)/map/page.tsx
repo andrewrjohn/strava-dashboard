@@ -1,5 +1,5 @@
 import { Map } from '@/components/map'
-import { getActivities } from '../../actions'
+import { getActivities } from '@/lib/strava'
 
 export default async function MapPage() {
   const allActivities = await getActivities()

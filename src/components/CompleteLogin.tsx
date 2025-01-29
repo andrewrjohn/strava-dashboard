@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { completeLogin } from '@/app/actions'
+import { completeLogin } from '@/lib/strava'
 import { Loader2Icon } from 'lucide-react'
 
 export default function CompleteLogin({ code }: { code: string }) {

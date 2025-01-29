@@ -1,5 +1,5 @@
 'use client'
-import { logout } from '@/app/actions'
+import { logout } from '@/lib/strava'
 import { LogOutIcon } from 'lucide-react'
 import React, { forwardRef } from 'react'
 

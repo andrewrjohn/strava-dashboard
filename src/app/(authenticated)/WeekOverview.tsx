@@ -9,10 +9,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
-import { getCurrentWeekSummary } from '@/lib/activities'
-import { formatTime, miles } from '@/lib/numbers'
+import { getCurrentWeekSummary, formatTime, miles } from '@/lib/activities'
 import { useState } from 'react'
-import { getAthleteStats } from '../actions'
+import { getAthleteStats } from '@/lib/strava'
 
 interface Props {
   currentWeekSummary: ReturnType<typeof getCurrentWeekSummary>

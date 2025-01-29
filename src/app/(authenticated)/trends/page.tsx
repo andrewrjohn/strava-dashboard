@@ -1,6 +1,6 @@
 import { HistoricChart } from '@/components/HistoricChart'
 import { groupActivitiesByWeek } from '@/lib/activities'
-import { getActivities } from '../../actions'
+import { getActivities } from '@/lib/strava'
 
 export default async function Trends() {
   const allActivities = await getActivities()

@@ -1,3 +1,4 @@
 import Redis from 'ioredis'
+import { Env } from './env'
 
-export const redis = new Redis(process.env.REDIS_URL ?? '')
+export const redis = new Redis(Env.REDIS_URL ?? '')

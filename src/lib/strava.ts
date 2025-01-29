@@ -1,9 +1,11 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import { STRAVA_APP_ID, COOKIES } from '@/lib/constants'
 import { prisma } from '@/lib/prisma'
-import { getAthleteId } from '@/lib/cookies'
+import {
+  clearCurrentAthleteId,
+  getCurrentAthleteId,
+  setCurrentAthleteId,
+} from '@/lib/cookies'
 import {
   AthleteStats as ActivityStats,
   DetailedActivity,
@@ -12,6 +14,7 @@ import {
 } from '@/types/interfaces'
 import { redirect } from 'next/navigation'
 import { redis } from '@/lib/redis'
+import { Env } from './env'
 
 const BASE_URL = 'https://www.strava.com/api/v3'
 
@@ -19,9 +22,16 @@ const BASE_URL = 'https://www.strava.com/api/v3'
 // The user cache is updated via webhook, so this is more like a max TTL in case of webhook failure
 const CACHE_TTL = 60 * 60 * 24 // 24 hours in seconds
 
-export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
-  const strava_athlete_id =
-    stravaAthleteId ?? Number(cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value)
+type RequestOptions = {
+  bypassCache?: boolean
+}
+
+export async function stravaApiRequest(
+  path: string,
+  options: RequestOptions = {},
+) {
+  const strava_athlete_id = Number(getCurrentAthleteId())
+
   if (!strava_athlete_id) throw Error('Missing strava athlete id cookie')
 
   const user = await prisma.user.findFirst({ where: { strava_athlete_id } })
@@ -38,7 +48,7 @@ export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
   if (tokenExpired) {
     accessToken = await refreshAccessToken(
       strava_refresh_token,
-      stravaAthleteId,
+      strava_athlete_id,
     )
   }
 
@@ -46,9 +56,7 @@ export async function stravaApiRequest(path: string, stravaAthleteId?: number) {
 
   const cacheKey = strava_athlete_id.toString() + initialUrl.pathname
 
-  // We pass in the athlete ID when updating from webhook
-  // so we want to bypass the cache in this case
-  if (!stravaAthleteId) {
+  if (!options.bypassCache) {
     const cached = await redis.get(cacheKey)
 
     if (cached) return JSON.parse(cached)
@@ -103,12 +111,12 @@ async function refreshAccessToken(
   refreshToken: string,
   stravaAthleteId?: number,
 ) {
-  const strava_secret = process.env.STRAVA_SECRET
+  const strava_secret = Env.STRAVA_SECRET
 
   if (!strava_secret) throw Error('Missing STRAVA_SECRET env variable')
 
   const params = {
-    client_id: STRAVA_APP_ID.toString(),
+    client_id: Env.STRAVA_APP_ID.toString(),
     client_secret: strava_secret ?? '',
     refresh_token: refreshToken,
     grant_type: 'refresh_token',
@@ -127,8 +135,7 @@ async function refreshAccessToken(
     refresh_token: string
     expires_at: number
   } = await res.json()
-  const strava_athlete_id =
-    stravaAthleteId ?? Number(cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value)
+  const strava_athlete_id = stravaAthleteId ?? Number(getCurrentAthleteId())
 
   if (!strava_athlete_id) throw Error('Missing strava athlete id cookie')
 
@@ -156,12 +163,12 @@ async function refreshAccessToken(
 export async function completeLogin(code: string) {
   'use server'
 
-  const strava_secret = process.env.STRAVA_SECRET
+  const strava_secret = Env.STRAVA_SECRET
 
   if (!strava_secret) throw Error('Missing STRAVA_SECRET env variable')
 
   const params = {
-    client_id: STRAVA_APP_ID.toString(),
+    client_id: Env.STRAVA_APP_ID.toString(),
     client_secret: strava_secret ?? '',
     code,
     grant_type: 'authorization_code',
@@ -195,35 +202,33 @@ export async function completeLogin(code: string) {
     },
   })
 
-  cookies().set(COOKIES.STRAVA_ATHLETE_ID, data.athlete.id)
+  setCurrentAthleteId(data.athlete.id)
 }
 
 export async function logout() {
-  cookies().delete(COOKIES.STRAVA_ATHLETE_ID)
+  clearCurrentAthleteId()
 
   redirect('/login')
 }
 
 export async function getAthlete(
-  stravaAthleteId?: number,
+  options: RequestOptions = {},
 ): Promise<DetailedAthlete> {
-  const data = await stravaApiRequest(`/athlete`, stravaAthleteId)
+  const data = await stravaApiRequest(`/athlete`, options)
   return data
 }
 
 export async function getAthleteStats(
-  stravaAthleteId?: number,
+  options: RequestOptions = {},
 ): Promise<ActivityStats> {
-  let athleteId = stravaAthleteId ?? getAthleteId()
+  const athleteId = Number(getCurrentAthleteId())
   if (!athleteId) throw Error('Missing athlete id')
-  athleteId = Number(athleteId)
 
   const data = (await stravaApiRequest(
     `/athletes/${athleteId}/stats`,
-    athleteId,
   )) as ActivityStats
 
-  const activities = await getActivities(athleteId)
+  const activities = await getActivities(options)
 
   // YTD stats - for some reason Strava is returning empty values for this
   // so we need to calculate it manually
@@ -254,11 +259,9 @@ export async function getAthleteStats(
 }
 
 export async function getActivities(
-  stravaAthleteId?: number,
+  options: RequestOptions = {},
 ): Promise<SummaryActivity[]> {
-  let athleteId = stravaAthleteId ?? getAthleteId()
-  if (!athleteId) throw Error('Missing athlete id')
-  athleteId = Number(athleteId)
+  const athleteId = Number(getCurrentAthleteId())
 
   if (!athleteId) return []
 
@@ -267,26 +270,24 @@ export async function getActivities(
 
   const data = await stravaApiRequest(
     `/athlete/activities?per_page=${pageSize}`,
-    athleteId,
+    options,
   )
   return data
 }
 
-export async function updateUserData(athleteId: number) {
-  await getAthlete(athleteId)
-  await getAthleteStats(athleteId)
-  await getActivities(athleteId)
+export async function updateUserData(options: RequestOptions = {}) {
+  await getAthlete(options)
+  await getAthleteStats(options)
+  await getActivities(options)
 }
 
 export async function getDetailedActivity(
   activityId: number,
+  options: RequestOptions = {},
 ): Promise<DetailedActivity> {
-  const athleteId = getAthleteId()
+  const athleteId = getCurrentAthleteId()
   if (!athleteId) throw Error('Missing athlete id')
 
-  const data = await stravaApiRequest(
-    `/activities/${activityId}`,
-    Number(athleteId),
-  )
+  const data = await stravaApiRequest(`/activities/${activityId}`, options)
   return data
 }

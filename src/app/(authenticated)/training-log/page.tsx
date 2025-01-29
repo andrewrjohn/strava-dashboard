@@ -1,4 +1,4 @@
-import { getActivities } from '../../actions'
+import { getActivities } from '../../../lib/strava'
 import ActivityTable from '@/components/ActivityTable'
 import ActivityCalendar from '@/components/ActivityCalendar'
 import WeeklySummary from '@/components/WeeklySummary'

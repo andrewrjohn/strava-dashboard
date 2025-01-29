@@ -22,10 +22,10 @@ import { SummaryActivity } from '@/types/interfaces'
 import polyline from '@mapbox/polyline'
 
 import 'leaflet/dist/leaflet.css'
-import { STRAVA_ORANGE } from '@/lib/constants'
 import { getStravaActivityUrl } from '@/lib/activities'
 import dynamic from 'next/dynamic'
 import { useMapEvent } from 'react-leaflet'
+import { STRAVA_ORANGE } from '@/lib/colors'
 
 const DEFAULT_STROKE_WEIGHT = 4
 const DEFAULT_STROKE_OPACITY = 0.5

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import './globals.css'
 import { FrownIcon } from 'lucide-react'
-import { logout } from './actions'
+import { logout } from '../lib/strava'
 
 export default function GlobalError({
   error,

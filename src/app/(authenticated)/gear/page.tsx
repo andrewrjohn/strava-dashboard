@@ -1,10 +1,9 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { getAthlete } from '../../actions'
-import { miles } from '@/lib/numbers'
+import { getAthlete } from '@/lib/strava'
 import React from 'react'
 import { FootprintsIcon } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
-
+import { miles } from '@/lib/activities'
 const MAX_DISTANCE = 300
 
 export default async function GearPage() {

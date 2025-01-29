@@ -1,11 +1,10 @@
 'use client'
-import { formatTime } from '@/lib/numbers'
 import { getCurrentWeekRange } from '@/lib/utils'
 import { WeekSummary } from '@/types/interfaces'
 import { useState } from 'react'
 import { Card } from './ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
-
+import { formatTime } from '@/lib/activities'
 interface Props {
   groupedActivities: Record<string, WeekSummary>
 }

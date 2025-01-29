@@ -9,7 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { formatTime, getPace, miles } from '@/lib/numbers'
 import { format } from 'date-fns'
 import {
   Table,
@@ -24,7 +23,12 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 import { ExternalLink } from './ui/external-link'
 import { SummaryActivity } from '@/types/interfaces'
-import { getStravaActivityUrl } from '@/lib/activities'
+import {
+  getStravaActivityUrl,
+  formatTime,
+  getPace,
+  miles,
+} from '@/lib/activities'
 
 type Activities = SummaryActivity[]
 

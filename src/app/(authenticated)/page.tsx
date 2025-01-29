@@ -1,11 +1,15 @@
-import { getCurrentWeekSummary } from '@/lib/activities'
-import { getActivities, getAthleteStats } from '../actions'
+import {
+  getCurrentWeekSummary,
+  formatTime,
+  getPace,
+  miles,
+} from '@/lib/activities'
+import { getActivities, getAthleteStats } from '../../lib/strava'
 import { WeekOverview } from './WeekOverview'
 import Link from 'next/link'
 import { ArrowRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { formatTime, getPace, miles } from '@/lib/numbers'
 import { format } from 'date-fns'
 
 export default async function Home() {

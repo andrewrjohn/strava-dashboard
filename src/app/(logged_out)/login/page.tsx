@@ -1,11 +1,11 @@
-import { cookies } from 'next/headers'
 import React from 'react'
 import CompleteLogin from '@/components/CompleteLogin'
-import { COOKIES, STRAVA_AUTHORIZATION_URL } from '@/lib/constants'
+import { STRAVA_AUTHORIZATION_URL } from '@/lib/constants'
 import { redirect } from 'next/navigation'
 import { ExternalLink } from '@/components/ui/external-link'
 import Image from 'next/image'
 import ConnectWithStrava from '@/images/btn_strava_connectwith_light.svg'
+import { getCurrentAthleteId } from '@/lib/cookies'
 
 interface Props {
   searchParams?: {
@@ -16,7 +16,7 @@ interface Props {
 
 export default function LoginPage(props: Props) {
   const { searchParams } = props
-  const athleteId = cookies().get(COOKIES.STRAVA_ATHLETE_ID)?.value
+  const athleteId = getCurrentAthleteId()
 
   if (athleteId) {
     redirect('/')

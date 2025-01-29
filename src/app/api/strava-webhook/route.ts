@@ -1,6 +1,7 @@
-import { updateUserData } from '@/app/actions'
+import { updateUserData } from '@/lib/strava'
 import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server'
+import { Env } from '@/lib/env'
 
 type StravaWebhookBody = {
   object_type: 'activity' | 'athlete'
@@ -26,7 +27,7 @@ export const POST = async (req: NextRequest) => {
   })
 
   if (user) {
-    await updateUserData(athleteId)
+    await updateUserData({ bypassCache: true })
   }
 
   return Response.json({ success: true }, { status: 200 })
@@ -37,7 +38,7 @@ export const GET = async (req: NextRequest) => {
   const challenge = query.get('hub.challenge')
   const verifyToken = query.get('hub.verify_token')
 
-  if (verifyToken !== process.env.STRAVA_WEBHOOK_SECRET) {
+  if (verifyToken !== Env.STRAVA_WEBHOOK_SECRET) {
     return Response.json({ success: false }, { status: 401 })
   }
 

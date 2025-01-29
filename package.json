@@ -34,7 +34,8 @@
     "react-leaflet": "^4.2.1",
     "recharts": "^2.13.3",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@headlessui/tailwindcss": "^0.2.0",
