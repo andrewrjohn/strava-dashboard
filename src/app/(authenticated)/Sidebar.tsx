@@ -3,7 +3,7 @@
 import LogoutButton from '@/components/LogoutButton'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn, getStravaProfileUrl } from '@/lib/utils'
 import { DetailedAthlete } from '@/types/interfaces'
 import {
   BarChartIcon,
@@ -27,14 +27,14 @@ const routes = [
     href: '/training-log',
   },
   {
+    label: 'Trends',
+    icon: BarChartIcon,
+    href: '/trends',
+  },
+  {
     label: 'Map',
     icon: MapIcon,
     href: '/map',
-  },
-  {
-    label: 'Stats',
-    icon: BarChartIcon,
-    href: '/stats',
   },
   {
     label: 'Gear',
@@ -77,13 +77,15 @@ export function Sidebar(props: Props) {
       </div>
       <div className="border-t p-4">
         <div className="flex flex-col md:flex-row items-center gap-3">
-          <Avatar>
-            <AvatarImage src={athlete.profile} />
-            <AvatarFallback>
-              {athlete.firstname.charAt(0)}
-              {athlete.lastname.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
+          <a href={getStravaProfileUrl(athlete.id)} target="_blank">
+            <Avatar>
+              <AvatarImage src={athlete.profile} />
+              <AvatarFallback>
+                {athlete.firstname.charAt(0)}
+                {athlete.lastname.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </a>
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium hidden md:block">
               {athlete.firstname} {athlete.lastname}

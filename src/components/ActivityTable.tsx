@@ -97,6 +97,7 @@ export default function ActivityTable(props: Props) {
   const pageSize = table.getState().pagination.pageSize
   return (
     <div>
+      <h3 className="text-lg font-medium mb-2">Activity History</h3>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

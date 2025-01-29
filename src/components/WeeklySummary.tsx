@@ -1,11 +1,13 @@
 'use client'
-import React, { useState } from 'react'
+import { formatTime } from '@/lib/numbers'
 import { getCurrentWeekRange } from '@/lib/utils'
+import { WeekSummary } from '@/types/interfaces'
+import { useState } from 'react'
+import { Card } from './ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
-import { Card, CardTitle, CardHeader, CardContent } from './ui/card'
 
 interface Props {
-  groupedActivities: Record<string, string>
+  groupedActivities: Record<string, WeekSummary>
 }
 
 export default function WeeklySummary(props: Props) {
@@ -15,38 +17,43 @@ export default function WeeklySummary(props: Props) {
     getCurrentWeekRange(),
   )
 
+  const selectedData = groupedActivities[selectedWeek]
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <div className="flex flex-col md:flex-row gap-2 justify-between items-center">
-            <div>Week Total</div>
-            <Select
-              onValueChange={(v) => setSelectedWeek(v)}
-              value={selectedWeek}
-            >
-              <SelectTrigger className="max-w-[240px]">
-                {selectedWeek}
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(groupedActivities).map((week) => (
-                  <SelectItem key={week} value={week}>
-                    {week}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-end justify-center md:justify-start gap-2">
-          <p className="font-medium text-2xl">
-            {groupedActivities[selectedWeek]}
+    <div className="w-full md:max-w-lg">
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-medium">Week Total</h3>
+        <Select onValueChange={(v) => setSelectedWeek(v)} value={selectedWeek}>
+          <SelectTrigger className="max-w-[240px]">
+            {selectedWeek}
+          </SelectTrigger>
+          <SelectContent>
+            {Object.keys(groupedActivities).map((week) => (
+              <SelectItem key={week} value={week}>
+                {week}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex items-center gap-2 mt-2 w-full flex-col">
+        <Card className="w-full px-2 py-3">
+          <h4 className="opacity-75 text-sm">Runs</h4>
+          <p className="font-semibold text-4xl">{selectedData.count}</p>
+        </Card>
+        <Card className="w-full px-2 py-3">
+          <h4 className="opacity-75 text-sm">Miles Ran</h4>
+          <p className="font-semibold text-4xl">
+            {selectedData.distance.toFixed(2)}
           </p>
-          <h4 className="text-muted-foreground mb-0.5 text-sm">miles</h4>
-        </div>
-      </CardContent>
-    </Card>
+        </Card>
+        <Card className="w-full px-2 py-3">
+          <h4 className="opacity-75 text-sm">Time Spent</h4>
+          <p className="font-semibold text-4xl">
+            {formatTime(selectedData.time)}
+          </p>
+        </Card>
+      </div>
+    </div>
   )
 }

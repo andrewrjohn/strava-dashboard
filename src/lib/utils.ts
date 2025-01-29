@@ -43,3 +43,6 @@ export function convertWeekNumberToDateRange(year: number, weekNumber: number) {
 export const getCurrentWeekNumber = () => Number(format(new Date(), 'w'))
 export const getCurrentWeekRange = () =>
   convertWeekNumberToDateRange(new Date().getFullYear(), getCurrentWeekNumber())
+
+export const getStravaProfileUrl = (id: number) =>
+  `https://www.strava.com/athletes/${id}`

@@ -1,15 +1,16 @@
 'use client'
 
+import { WeekSummary } from '@/types/interfaces'
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 interface Props {
-  data: Record<string, string>
+  data: Record<string, WeekSummary>
 }
 
 export function HistoricChart(props: Props) {
-  const data = Object.entries(props.data).map(([week, distance]) => ({
+  const data = Object.entries(props.data).map(([week, { distance }]) => ({
     week: week.split('-')[0],
-    distance: Number(distance),
+    distance,
   }))
   data.reverse()
 
@@ -51,7 +52,7 @@ export function HistoricChart(props: Props) {
                 <div className="bg-card text-card-foreground p-2 rounded-md border-border border text-sm">
                   <div>{week}</div>
                   <div className="mt-1 text-muted-foreground">
-                    {distance} mi
+                    {distance ? Number(distance).toFixed(2) : 0} mi
                   </div>
                 </div>
               )

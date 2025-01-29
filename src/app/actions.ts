@@ -6,6 +6,7 @@ import { prisma } from '@/lib/prisma'
 import { getAthleteId } from '@/lib/cookies'
 import {
   AthleteStats as ActivityStats,
+  DetailedActivity,
   DetailedAthlete,
   SummaryActivity,
 } from '@/types/interfaces'
@@ -275,4 +276,17 @@ export async function updateUserData(athleteId: number) {
   await getAthlete(athleteId)
   await getAthleteStats(athleteId)
   await getActivities(athleteId)
+}
+
+export async function getDetailedActivity(
+  activityId: number,
+): Promise<DetailedActivity> {
+  const athleteId = getAthleteId()
+  if (!athleteId) throw Error('Missing athlete id')
+
+  const data = await stravaApiRequest(
+    `/activities/${activityId}`,
+    Number(athleteId),
+  )
+  return data
 }

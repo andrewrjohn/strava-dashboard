@@ -1,6 +1,6 @@
 import { getCurrentWeekSummary } from '@/lib/activities'
 import { getActivities, getAthleteStats } from '../actions'
-import { Overview } from './Summary'
+import { WeekOverview } from './WeekOverview'
 import Link from 'next/link'
 import { ArrowRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -20,8 +20,8 @@ export default async function Home() {
   const currentWeekSummary = getCurrentWeekSummary(activities)
 
   return (
-    <div className="space-y-8">
-      <Overview currentWeekSummary={currentWeekSummary} stats={stats} />
+    <div className="space-y-8 max-w-screen-lg">
+      <WeekOverview currentWeekSummary={currentWeekSummary} stats={stats} />
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Latest Run</h3>

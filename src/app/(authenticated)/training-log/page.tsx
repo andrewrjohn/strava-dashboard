@@ -1,19 +1,15 @@
 import { getActivities } from '../../actions'
 import ActivityTable from '@/components/ActivityTable'
 import ActivityCalendar from '@/components/ActivityCalendar'
-import dynamic from 'next/dynamic'
-
-const Map = dynamic(() => import('@/components/map').then((mod) => mod.Map), {
-  ssr: false,
-  loading: () => <p>Loading map...</p>,
-})
+import WeeklySummary from '@/components/WeeklySummary'
+import { groupActivitiesByWeek } from '@/lib/activities'
 
 export default async function LogPage() {
   const allActivities = await getActivities()
   const activities = allActivities.filter((a) =>
     a.sport_type.toLowerCase().includes('run'),
   )
-
+  const weeks = groupActivitiesByWeek(activities)
   return (
     <div className="space-y-8">
       <div>
@@ -22,7 +18,10 @@ export default async function LogPage() {
           View and analyze your running history
         </p>
       </div>
-      <ActivityCalendar activities={activities} />
+      <div className="flex items-center gap-8 flex-col md:flex-row">
+        <WeeklySummary groupedActivities={weeks} />
+        <ActivityCalendar activities={activities} />
+      </div>
       <ActivityTable activities={activities} />
     </div>
   )

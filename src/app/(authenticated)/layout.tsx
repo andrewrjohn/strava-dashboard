@@ -22,7 +22,7 @@ export default async function RootLayout({
       <Sidebar athlete={athlete} />
 
       <div className="md:px-7 px-4 py-3 md:py-6 flex flex-col flex-1 overflow-y-scroll w-full">
-        <div className="flex-1 flex flex-col">{children}</div>
+        <div className="flex-1 flex flex-col max-w-screen-xl">{children}</div>
         <footer className="flex justify-center mt-10">
           <FooterImage />
         </footer>

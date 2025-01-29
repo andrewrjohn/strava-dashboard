@@ -19,7 +19,7 @@ interface Props {
   stats: Awaited<ReturnType<typeof getAthleteStats>>
 }
 
-export function Overview(props: Props) {
+export function WeekOverview(props: Props) {
   const { currentWeekSummary, stats } = props
   const [timeline, setTimeline] = useState<
     'week' | 'month' | 'ytd' | 'lifetime'
