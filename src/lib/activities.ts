@@ -1,6 +1,6 @@
+import { convertWeekNumberToDateRange, getCurrentWeekNumber } from '@/lib/utils'
 import { SummaryActivity } from '@/types/interfaces'
 import { format, getISOWeeksInYear } from 'date-fns'
-import { convertWeekNumberToDateRange, getCurrentWeekNumber } from '@/lib/utils'
 import { miles } from './numbers'
 
 export function groupActivitiesByWeek(activities: SummaryActivity[]) {
@@ -55,16 +55,15 @@ export function groupActivitiesByWeek(activities: SummaryActivity[]) {
 }
 
 export function getCurrentWeekSummary(activities: SummaryActivity[]) {
-  const week = convertWeekNumberToDateRange(
+  const [firstDayOfWeek, lastDayOfWeek] = convertWeekNumberToDateRange(
     new Date().getFullYear(),
     getCurrentWeekNumber(),
-  )
+  ).split('-')
+
   const weekActivities = activities.filter(
     (a) =>
-      convertWeekNumberToDateRange(
-        new Date().getFullYear(),
-        Number(format(new Date(a.start_date), 'w')),
-      ) === week,
+      new Date(a.start_date) >= new Date(firstDayOfWeek) &&
+      new Date(a.start_date) <= new Date(lastDayOfWeek),
   )
 
   const weekTotal = weekActivities.reduce((acc, curr) => acc + curr.distance, 0)
@@ -72,7 +71,6 @@ export function getCurrentWeekSummary(activities: SummaryActivity[]) {
     distance: miles(weekTotal).toFixed(2),
     count: weekActivities.length,
     time: weekActivities.reduce((acc, curr) => acc + curr.moving_time, 0),
-    week,
   }
 }
 

@@ -11,7 +11,6 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { getCurrentWeekSummary } from '@/lib/activities'
 import { formatTime, miles } from '@/lib/numbers'
-import { getCurrentMonthName } from '@/lib/utils'
 import { useState } from 'react'
 import { getAthleteStats } from '../actions'
 
