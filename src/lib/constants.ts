@@ -10,3 +10,5 @@ export const STRAVA_AUTHORIZATION_URL = `https://www.strava.com/oauth/authorize?
 export const COOKIES = {
   STRAVA_ATHLETE_ID: 'strava_athlete_id',
 }
+
+export const STRAVA_ORANGE = '#FC4C02'

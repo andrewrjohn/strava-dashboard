@@ -10,6 +10,7 @@ import {
   CalendarIcon,
   FootprintsIcon,
   HomeIcon,
+  MapIcon,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -24,6 +25,11 @@ const routes = [
     label: 'Training Log',
     icon: CalendarIcon,
     href: '/training-log',
+  },
+  {
+    label: 'Map',
+    icon: MapIcon,
+    href: '/map',
   },
   {
     label: 'Stats',

@@ -1,6 +1,12 @@
 import { getActivities } from '../../actions'
 import ActivityTable from '@/components/ActivityTable'
 import ActivityCalendar from '@/components/ActivityCalendar'
+import dynamic from 'next/dynamic'
+
+const Map = dynamic(() => import('@/components/map').then((mod) => mod.Map), {
+  ssr: false,
+  loading: () => <p>Loading map...</p>,
+})
 
 export default async function LogPage() {
   const allActivities = await getActivities()
