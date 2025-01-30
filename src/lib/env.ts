@@ -12,6 +12,7 @@ const EnvSchema = z.object({
   DATABASE_URL: z.string(),
   REDIS_URL: z.string(),
   STRAVA_WEBHOOK_SECRET: z.string(),
+  JWT_SECRET: z.string(),
 })
 
 export const Env = EnvSchema.parse({
@@ -20,4 +21,5 @@ export const Env = EnvSchema.parse({
   DATABASE_URL: process.env.DATABASE_URL,
   REDIS_URL: process.env.REDIS_URL,
   STRAVA_WEBHOOK_SECRET: process.env.STRAVA_WEBHOOK_SECRET,
+  JWT_SECRET: process.env.JWT_SECRET,
 })

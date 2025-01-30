@@ -1,17 +1,33 @@
 import { cookies } from 'next/headers'
+import jwt from 'jsonwebtoken'
+import { Env } from './env'
 
 const KEYS = {
-  STRAVA_ATHLETE_ID: 'strava_athlete_id',
+  AUTH_TOKEN: 'run_hub_auth_token',
 }
 
 export function getCurrentAthleteId() {
-  return cookies().get(KEYS.STRAVA_ATHLETE_ID)?.value ?? null
+  const value = cookies().get(KEYS.AUTH_TOKEN)?.value ?? null
+  if (!value) return null
+
+  try {
+    const payload = jwt.verify(value, Env.JWT_SECRET) as string
+    const athleteId = Number(payload)
+
+    if (!athleteId) return null
+
+    return athleteId
+  } catch {
+    return null
+  }
 }
 
 export function setCurrentAthleteId(athleteId: number) {
-  cookies().set(KEYS.STRAVA_ATHLETE_ID, athleteId.toString())
+  const token = jwt.sign(athleteId.toString(), Env.JWT_SECRET)
+
+  cookies().set(KEYS.AUTH_TOKEN, token)
 }
 
 export function clearCurrentAthleteId() {
-  cookies().delete(KEYS.STRAVA_ATHLETE_ID)
+  cookies().delete(KEYS.AUTH_TOKEN)
 }
