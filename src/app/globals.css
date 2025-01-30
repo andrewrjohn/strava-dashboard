@@ -4,7 +4,9 @@
 
 @layer base {
   .thad {
-    cursor: url('/thad.png'), auto;
+    cursor:
+      url('/thad.png') 16 16,
+      auto;
   }
 
   :root {
