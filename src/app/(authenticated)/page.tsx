@@ -11,6 +11,7 @@ import { ArrowRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { format } from 'date-fns'
+import { ActivitySummaryCard } from '@/components/ActivitySummaryCard'
 
 export default async function Home() {
   const stats = await getAthleteStats()
@@ -36,45 +37,7 @@ export default async function Home() {
             </Link>
           </Button>
         </div>
-        <Card>
-          <CardContent className="p-6">
-            <div className="grid gap-4 md:grid-cols-4">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Distance
-                </p>
-                <p className="text-lg font-bold">
-                  {miles(latestActivity.distance).toFixed(2)} mi
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Time
-                </p>
-                <p className="text-lg font-bold">
-                  {formatTime(latestActivity.moving_time)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Pace
-                </p>
-                <p className="text-lg font-bold">
-                  {getPace(latestActivity.distance, latestActivity.moving_time)}{' '}
-                  /mi
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Date
-                </p>
-                <p className="text-lg font-bold">
-                  {format(latestActivity.start_date, 'MMM d, yyyy h:mm a')}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <ActivitySummaryCard activity={latestActivity} />
       </div>
     </div>
   )
