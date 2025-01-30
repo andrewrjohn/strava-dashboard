@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
-// if (typeof window !== 'undefined') {
-//   throw Error('Env should only be used on the server')
-// }
+if (typeof window !== 'undefined') {
+  throw Error(
+    "Env should only be used on the server (make sure you're not trying to use it in a client component)",
+  )
+}
 
 const EnvSchema = z.object({
   STRAVA_APP_ID: z.string(),

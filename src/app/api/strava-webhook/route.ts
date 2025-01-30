@@ -1,7 +1,8 @@
-import { updateUserData } from '@/lib/strava'
+import { forceUpdateUserData } from '@/lib/strava'
 import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server'
 import { Env } from '@/lib/env'
+import { setCurrentAthleteId } from '@/lib/cookies'
 
 type StravaWebhookBody = {
   object_type: 'activity' | 'athlete'
@@ -26,9 +27,16 @@ export const POST = async (req: NextRequest) => {
     where: { strava_athlete_id: athleteId },
   })
 
-  if (user) {
-    await updateUserData({ bypassCache: true })
+  if (!user) {
+    return Response.json(
+      { success: false, error: `User not found with athlete id ${athleteId}` },
+      { status: 404 },
+    )
   }
+
+  setCurrentAthleteId(athleteId)
+
+  await forceUpdateUserData({ bypassCache: true })
 
   return Response.json({ success: true }, { status: 200 })
 }

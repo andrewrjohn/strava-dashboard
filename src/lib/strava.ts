@@ -23,12 +23,15 @@ const BASE_URL = 'https://www.strava.com/api/v3'
 const CACHE_TTL = 60 * 60 * 24 // 24 hours in seconds
 
 type RequestOptions = {
+  /** We should only bypass the cache if this request is being initiated by a webhook
+   * since we can confirm that there is fresh data to fetch.
+   */
   bypassCache?: boolean
 }
 
 export async function stravaApiRequest(
   path: string,
-  options: RequestOptions = {},
+  options: RequestOptions = { bypassCache: false },
 ) {
   const strava_athlete_id = Number(getCurrentAthleteId())
 
@@ -46,10 +49,7 @@ export async function stravaApiRequest(
   const tokenExpired = accessTokenExpiresAt <= Date.now()
 
   if (tokenExpired) {
-    accessToken = await refreshAccessToken(
-      strava_refresh_token,
-      strava_athlete_id,
-    )
+    accessToken = await refreshAccessToken(strava_refresh_token)
   }
 
   const initialUrl = new URL(`${BASE_URL}${path}`)
@@ -107,10 +107,7 @@ export async function stravaApiRequest(
   return data
 }
 
-async function refreshAccessToken(
-  refreshToken: string,
-  stravaAthleteId?: number,
-) {
+async function refreshAccessToken(refreshToken: string) {
   const strava_secret = Env.STRAVA_SECRET
 
   if (!strava_secret) throw Error('Missing STRAVA_SECRET env variable')
@@ -135,7 +132,7 @@ async function refreshAccessToken(
     refresh_token: string
     expires_at: number
   } = await res.json()
-  const strava_athlete_id = stravaAthleteId ?? Number(getCurrentAthleteId())
+  const strava_athlete_id = Number(getCurrentAthleteId())
 
   if (!strava_athlete_id) throw Error('Missing strava athlete id cookie')
 
@@ -226,6 +223,7 @@ export async function getAthleteStats(
 
   const data = (await stravaApiRequest(
     `/athletes/${athleteId}/stats`,
+    options,
   )) as ActivityStats
 
   const activities = await getActivities(options)
@@ -275,7 +273,7 @@ export async function getActivities(
   return data
 }
 
-export async function updateUserData(options: RequestOptions = {}) {
+export async function forceUpdateUserData(options: RequestOptions = {}) {
   await getAthlete(options)
   await getAthleteStats(options)
   await getActivities(options)
