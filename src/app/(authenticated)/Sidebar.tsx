@@ -3,6 +3,7 @@
 import LogoutButton from '@/components/LogoutButton'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
 import { cn, getStravaProfileUrl } from '@/lib/utils'
 import { DetailedAthlete } from '@/types/interfaces'
 import {
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 const routes = [
   {
@@ -52,6 +54,10 @@ export function Sidebar(props: Props) {
 
   const pathname = usePathname()
 
+  const toggleThadMode = () => {
+    document.documentElement.classList.toggle('thad')
+  }
+
   return (
     <div className="flex flex-col h-[100dvh] border-r bg-muted/10">
       <div className="flex h-14 items-center border-b px-6">
@@ -74,6 +80,10 @@ export function Sidebar(props: Props) {
             </Link>
           </Button>
         ))}
+      </div>
+      <div className="px-6 flex flex-col sm:flex-row gap-2 mb-4 sm:justify-center items-center">
+        <label className="text-sm font-medium hidden sm:block">Thad Mode</label>
+        <Switch onCheckedChange={toggleThadMode} />
       </div>
       <div className="border-t p-4">
         <div className="flex flex-col md:flex-row items-center gap-3">
