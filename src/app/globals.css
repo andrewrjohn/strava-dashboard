@@ -9,6 +9,42 @@
       auto;
   }
 
+  .thad h1 {
+    background: url('/thad.png') center center;
+    color: transparent;
+    width: 100%;
+  }
+
+  .thad #sidebar-icon {
+    background: url('/thad.png') no-repeat center center;
+    background-size: contain;
+    stroke: transparent;
+    fill: transparent;
+  }
+
+  .thad footer img {
+    display: none;
+  }
+
+  .thad footer::before {
+    content: 'Powered by ';
+    margin-top: 13px;
+    opacity: 0.65;
+    text-transform: uppercase;
+    margin-right: 2px;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .thad footer::after {
+    content: 'Thad';
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 20px;
+    opacity: 0.65;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;

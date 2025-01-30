@@ -75,7 +75,7 @@ export function Sidebar(props: Props) {
             asChild
           >
             <Link href={href}>
-              <Icon className="h-4 w-4" />
+              <Icon id="sidebar-icon" className="h-4 w-4" />
               <span className="hidden md:inline">{label}</span>
             </Link>
           </Button>
