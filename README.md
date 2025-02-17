@@ -1,3 +1,4 @@
+![](./readme_image.png)
 ### Strava Running Dashboard
 
 Features:
