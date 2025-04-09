@@ -3,14 +3,13 @@ import {
   formatTime,
   getPace,
   miles,
+  getCurrentStreak,
 } from '@/lib/activities'
 import { getActivities, getAthleteStats } from '../../lib/strava'
 import { WeekOverview } from './WeekOverview'
 import Link from 'next/link'
 import { ArrowRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { format } from 'date-fns'
 import { ActivitySummaryCard } from '@/components/ActivitySummaryCard'
 
 export default async function Home() {
@@ -24,9 +23,15 @@ export default async function Home() {
 
   const currentWeekSummary = getCurrentWeekSummary(activities)
 
+  const currentStreak = getCurrentStreak(activities)
+
   return (
     <div className="space-y-8 max-w-screen-lg">
-      <WeekOverview currentWeekSummary={currentWeekSummary} stats={stats} />
+      <WeekOverview
+        currentWeekSummary={currentWeekSummary}
+        stats={stats}
+        currentStreak={currentStreak}
+      />
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Latest Run</h3>

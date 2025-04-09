@@ -81,10 +81,10 @@ export function Sidebar(props: Props) {
           </Button>
         ))}
       </div>
-      <div className="px-6 flex flex-col sm:flex-row gap-2 mb-4 sm:justify-center items-center">
+      {/* <div className="px-6 flex flex-col sm:flex-row gap-2 mb-4 sm:justify-center items-center">
         <label className="text-sm font-medium hidden sm:block">Thad Mode</label>
         <Switch onCheckedChange={toggleThadMode} />
-      </div>
+      </div> */}
       <div className="border-t p-4">
         <div className="flex flex-col md:flex-row items-center gap-3">
           <a href={getStravaProfileUrl(athlete.id)} target="_blank">

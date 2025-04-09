@@ -1,6 +1,6 @@
 import { convertWeekNumberToDateRange, getCurrentWeekNumber } from '@/lib/utils'
 import { SummaryActivity, WeekSummary } from '@/types/interfaces'
-import { format } from 'date-fns'
+import { format, isSameDay, subDays } from 'date-fns'
 
 export function groupActivitiesByWeek(activities: SummaryActivity[]) {
   const sorted = activities.sort(
@@ -79,4 +79,45 @@ export function formatTime(seconds: number) {
 export function getPace(meters: number, seconds: number) {
   const pace = seconds / miles(meters)
   return formatTime(pace)
+}
+
+export function getCurrentStreak(activities: SummaryActivity[]) {
+  const sorted = activities.sort(
+    (a, b) => +new Date(b.start_date_local) - +new Date(a.start_date_local),
+  )
+
+  const now = new Date()
+
+  let streak = 0
+
+  const yesterdayActivity = sorted.find((a) =>
+    isSameDay(new Date(a.start_date_local), subDays(now, 1)),
+  )
+
+  if (!yesterdayActivity) {
+    return 0
+  }
+
+  for (let i = 0; i < sorted.length; i++) {
+    streak += 1
+
+    const activity = sorted[i]
+    const lastActivity = sorted[i + 1]
+
+    // At the end
+    if (!lastActivity) {
+      break
+    }
+
+    const didActivityPreviousDay = isSameDay(
+      subDays(new Date(activity.start_date_local), 1),
+      new Date(lastActivity.start_date_local),
+    )
+
+    if (!didActivityPreviousDay) {
+      break
+    }
+  }
+
+  return streak
 }
