@@ -53,7 +53,7 @@ export function ActivitySummaryCard(props: Props) {
           <div>
             <p className="text-sm font-medium text-muted-foreground">Date</p>
             <p className="text-lg font-bold">
-              {format(activity.start_date, 'MMM d, yyyy h:mm aa')}
+              {format(activity.start_date_local, 'MMM d, yyyy h:mm aa')}
             </p>
           </div>
           {showStravaLink && (
