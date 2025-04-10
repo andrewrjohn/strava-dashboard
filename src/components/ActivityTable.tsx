@@ -79,7 +79,7 @@ export default function ActivityTable(props: Props) {
         header: () => <div className="ml-auto text-right">Date</div>,
         cell: ({ getValue }) => (
           <div className="text-right">
-            {format(new Date(getValue()), 'MM/dd/yyyy h:mmaaa')}
+            {format(getValue(), 'MM/dd/yyyy h:mm aa')}
           </div>
         ),
       }),
