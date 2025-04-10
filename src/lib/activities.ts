@@ -120,7 +120,12 @@ export function getCurrentStreak(activities: SummaryActivity[]) {
       new Date(lastActivity.start_date_local),
     )
 
-    if (!didActivityPreviousDay) {
+    const previousActivityIsSameDay = isSameDay(
+      new Date(activity.start_date_local),
+      new Date(lastActivity.start_date_local),
+    )
+
+    if (!didActivityPreviousDay && !previousActivityIsSameDay) {
       break
     }
   }
