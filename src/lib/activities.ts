@@ -88,8 +88,6 @@ export function getCurrentStreak(activities: SummaryActivity[]) {
 
   const now = new Date()
 
-  let streak = 0
-
   const yesterdayActivity = sorted.find((a) =>
     isSameDay(new Date(a.start_date_local), subDays(now, 1)),
   )
@@ -98,11 +96,19 @@ export function getCurrentStreak(activities: SummaryActivity[]) {
     return 0
   }
 
-  for (let i = 0; i < sorted.length; i++) {
-    streak += 1
+  // Use a set to avoid counting extra for days with multiple activities
+  let datesInStreak = new Set<string>()
 
+  for (let i = 0; i < sorted.length; i++) {
     const activity = sorted[i]
     const lastActivity = sorted[i + 1]
+
+    const formattedDate = format(
+      new Date(activity.start_date_local),
+      'yyyy-MM-dd',
+    )
+
+    datesInStreak.add(formattedDate)
 
     // At the end
     if (!lastActivity) {
@@ -119,5 +125,5 @@ export function getCurrentStreak(activities: SummaryActivity[]) {
     }
   }
 
-  return streak
+  return datesInStreak.size
 }
