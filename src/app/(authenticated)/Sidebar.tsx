@@ -75,7 +75,7 @@ export function Sidebar(props: Props) {
             <TooltipTrigger>
               <div className="text-strava flex items-center text-xl">
                 <FlameIcon />
-                <div className="pt-1">{currentStreak}</div>
+                <div className="pt-1 font-bold">{currentStreak}</div>
               </div>
             </TooltipTrigger>
 
