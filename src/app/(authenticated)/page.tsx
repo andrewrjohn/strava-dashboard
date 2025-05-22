@@ -23,15 +23,9 @@ export default async function Home() {
 
   const currentWeekSummary = getCurrentWeekSummary(activities)
 
-  const currentStreak = getCurrentStreak(activities)
-
   return (
     <div className="space-y-8 max-w-screen-lg">
-      <WeekOverview
-        currentWeekSummary={currentWeekSummary}
-        stats={stats}
-        currentStreak={currentStreak}
-      />
+      <WeekOverview currentWeekSummary={currentWeekSummary} stats={stats} />
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Latest Run</h3>

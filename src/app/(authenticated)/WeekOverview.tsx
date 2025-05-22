@@ -9,24 +9,17 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { formatTime, getCurrentWeekSummary, miles } from '@/lib/activities'
 import { getAthleteStats } from '@/lib/strava'
-import { FlameIcon } from 'lucide-react'
 import { useState } from 'react'
 
 interface Props {
   currentWeekSummary: ReturnType<typeof getCurrentWeekSummary>
   stats: Awaited<ReturnType<typeof getAthleteStats>>
-  currentStreak: number
 }
 
 export function WeekOverview(props: Props) {
-  const { currentWeekSummary, stats, currentStreak } = props
+  const { currentWeekSummary, stats } = props
   const [timeline, setTimeline] = useState<
     'week' | 'month' | 'ytd' | 'lifetime'
   >('week')
@@ -53,21 +46,7 @@ export function WeekOverview(props: Props) {
     <>
       <div>
         <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-          Overview{' '}
-          {currentStreak >= 2 && (
-            <Tooltip>
-              <TooltipTrigger>
-                <div className="text-strava flex items-center text-xl">
-                  <FlameIcon />
-                  <div className="pt-1">{currentStreak}</div>
-                </div>
-              </TooltipTrigger>
-
-              <TooltipContent className="font-normal">
-                You have run {currentStreak.toLocaleString()} days in a row!
-              </TooltipContent>
-            </Tooltip>
-          )}
+          Overview
         </h2>
         <p className="text-muted-foreground">Your running overview</p>
       </div>

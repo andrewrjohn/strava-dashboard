@@ -4,11 +4,17 @@ import LogoutButton from '@/components/LogoutButton'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { cn, getStravaProfileUrl } from '@/lib/utils'
 import { DetailedAthlete } from '@/types/interfaces'
 import {
   BarChartIcon,
   CalendarIcon,
+  FlameIcon,
   FootprintsIcon,
   HomeIcon,
   MapIcon,
@@ -47,10 +53,11 @@ const routes = [
 
 interface Props {
   athlete: DetailedAthlete
+  currentStreak: number
 }
 
 export function Sidebar(props: Props) {
-  const { athlete } = props
+  const { athlete, currentStreak } = props
 
   const pathname = usePathname()
 
@@ -60,9 +67,23 @@ export function Sidebar(props: Props) {
 
   return (
     <div className="flex flex-col h-[100dvh] border-r bg-muted/10">
-      <div className="flex h-14 items-center border-b px-6">
+      <div className="flex items-center border-b flex-col md:flex-row px-6 py-3 md:gap-2">
         <h1 className="text-xl font-bold sr-only md:not-sr-only">Run Hub</h1>
         <h1 className="text-xl font-bold md:hidden block">RH</h1>
+        {currentStreak >= 2 && (
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="text-strava flex items-center text-xl">
+                <FlameIcon />
+                <div className="pt-1">{currentStreak}</div>
+              </div>
+            </TooltipTrigger>
+
+            <TooltipContent className="font-normal">
+              You have run {currentStreak.toLocaleString()} days in a row!
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
       <div className="flex-1 space-y-1 p-3">
         {routes.map(({ label, href, icon: Icon }) => (
